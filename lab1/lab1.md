@@ -5,6 +5,8 @@ Verilog code. For this and the other labs you will work on the [SEAS Biglab
 machines](https://www.seas.upenn.edu/cets/answers/biglab.html). The Vivado tools
 are too heavyweight to run with the time/memory limitations in place on eniac.
 
+Note that this is an **individual lab**, so you should complete it on your own.
+
 ## Clone github repo
 
 First, clone this repo by running, on one of the biglab machines, the command:

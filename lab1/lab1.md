@@ -29,6 +29,8 @@ You can run the tests by cd-ing into the `lab1` directory (where this file is)
 and running the command `make test`. When you run the tests on the initial 
 `rca.v` code, lots of tests will fail.
 
+> Note also that when you first run `make test` you'll encounter an error that Vivado can't be found, and to run the command `source /home1/c/cis371/software/Vivado/2017.4/settings64.sh` to fix it. This command sets up your path so that the Vivado tools are accessible. To avoid having to run this command every time you login to biglab, you can add it to your `~/.bash_profile` file and it will automatically get run every time you login.
+
 When a test fails, it tells you that something is wrong,
 but it doesn't explain why. Careful testing of each module can be helpful in
 limiting the amount of code you need to examine: if we had only given tests for

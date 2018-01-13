@@ -5,14 +5,12 @@ Verilog code. For this and the other labs you will work on the [SEAS Biglab
 machines](https://www.seas.upenn.edu/cets/answers/biglab.html). The Vivado tools
 are too heavyweight to run with the time/memory limitations in place on eniac.
 
-## Run synthesis
+## Clone github repo
 
-Once you have cloned this repo, cd to the `lab1` directory (where this file
-lives) and run the command `make synth`. This will launch synthesis, and it will
-take about 2 minutes to complete. If something is really wrong with a design, it
-will not synthesize. But even designs with many serious problems (such as the
-initial code in this lab) will synthesize successfully. Completing synthesis
-doesn't mean much!
+First, clone this repo by running, on one of the biglab machines, the command:
+```
+git clone https://github.com/upenn-acg/cis371.git
+```
 
 ## Run the tests
 
@@ -20,18 +18,19 @@ We've provided a Verilog testbench with this lab, in the file
 `rca_testbench.v`. A testbench is code that generates test inputs, provides each
 input to a module being tested (called the UUT/DUT for "unit under test" or
 "design under test"), and checks that the output is correct. Testbench code is
-purely for simulation, so it can use richer constructs like loops, I/O, etc that
+purely for simulation, so it can use richer constructs like loops, I/O, etc. that
 cannot synthesize into real hardware.
 
 The provided `rca_testbench.v` file tests all possible inputs for each of the
-modules in `rca.v` -- it is a very thorough testbench, made possible because the
+modules in `rca.v` - it is a very thorough testbench, made possible because the
 UUTs are quite simple. 
 
-You can run the tests via the command `make test`. When you run the tests on the
-initial `rca.v` code, lots of tests will fail.
+You can run the tests by cd-ing into the `lab1` directory (where this file is) 
+and running the command `make test`. When you run the tests on the initial 
+`rca.v` code, lots of tests will fail.
 
-One important caveat with tests is that they tell you that something is wrong,
-but they don't explain why. Careful testing of each module can be helpful in
+When a test fails, it tells you that something is wrong,
+but it doesn't explain why. Careful testing of each module can be helpful in
 limiting the amount of code you need to examine: if we had only given tests for
 the `rca4` module, and it fails a test, you don't immediately know whether the
 bug is in `rca4` itself or in `fulladder2`, `fulladder`, or `halfadder`.
@@ -47,7 +46,16 @@ synthesis. The warnings/errors identified by Vivado are usually more specific:
 they explain what is wrong and often point to a specific place in the code. This
 is a much easier way to find many bugs!
 
-## Check Vivado log
+## Run synthesis
+
+Now cd to the `lab1` directory (where this file
+lives) and run the command `make synth`. This will launch synthesis, and it will
+take about 2 minutes to complete. If something is really wrong with a design, it
+will not synthesize. But even designs with many serious problems (such as the
+initial code in this lab) will synthesize successfully. Completing synthesis
+doesn't mean much!
+
+### Check Vivado log
 
 So, after synthesis finishes running, you should examine the log files to check
 for warnings. First, examine the file `vivado.log` which records everything that
@@ -66,17 +74,17 @@ serious:
 connected to it, which is usually indicative of a bug.
 + A "multi-driven net" is a
 wire that has too many inputs - each wire should be connected to just a single
-source (unless it is inside a mux). Hint: there are no muxes in this lab!
+source.
 + A "disconnected port" is an input or output
 port of a module that isn't connected to anything - also likely a bug.
 
 These warnings are hints to help you fix the bugs in this lab, and will also be
 valuable hints about the bugs you encounter in future labs. As you fix bugs, you
 can re-run synthesis via `make synth` to see if the warning goes away, or is
-perhaps replaced by another one -- sometimes one bug can mask another!
+perhaps replaced by another one - sometimes one bug can mask another!
 
 
-## Examine Design Rule Checks Report
+### Examine Design Rule Checks Report
 
 After you've fixed all the important warnings from `vivado.log`, you should
 examine the Design Rule Check (DRC) report in
@@ -85,7 +93,7 @@ Vivado runs to make sure that the design is reasonable. Sometimes they overlap
 with the warnings in `vivado.log`, but often they are separate and no less
 serious.
 
-One DRC warning that you can ignore is the following:
+One DRC warning that you *can* ignore is the following:
 ```
 ZPS7-1#1 Warning
 PS7 block required
@@ -96,12 +104,13 @@ Related violations: <none>
 It says that all designs should have a PS7 block, which represents the embedded
 ARM cores on the Zedboard's FPGA. For this class, we will use just the
 "programmable logic" (Vivado calls this the "PL" sometimes) and we don't need
-the ARM cores. Unfortunately, we don't know a good way to disable this warning.
+the ARM cores. Unfortunately, we don't know a good way to disable this warning
+without also disabling other useful warnings.
 
 There are other interesting reports in the `output/` directory. We'll dig into
 these more in future labs, but here's a quick summary:
 
-+ `post_synth_utilization.txt` shows how much of the FPGA's resources (LUTs, registers, block RAMs, etc.) were used.
++ `post_synth_utilization.txt` shows how much of the FPGA's resources (LUTs, registers, block RAMs, etc.) were used by the design.
 + `post_synth_timing_summary_report.txt` discusses whether the design met its timing constraints or not. The circuit in this lab is purely combinational so there are no timing constraints to satisfy.
 
 ## Revisiting the Tests
@@ -115,8 +124,8 @@ circuit that just doesn't do what it's supposed to do.
 To help hone in on these failing tests, you should pick just one failing test
 case (a single input to a particular module) and examine it. It may be helpful
 to write your own, smaller testbench (or comment out parts of `rca_testbench.v`)
-so that you can run just the input of interest. Start by debugging the simplest
-module, since those bugs may be the root cause of failures in other modules.
+so that you can run just the input of interest. Start by debugging the lowest-level
+module, since those bugs may be the root cause of failures in other higher-level modules.
 
 ## Wrapping Up
 

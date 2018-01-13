@@ -1,0 +1,11 @@
+vivado*.log
+vivado*.jou
+webtalk*.log
+webtalk*.jou
+vivado_pid*.str
+usage_statistics_webtalk.*ml
+.Xil/
+.bitstream-filename
+.constraint-files
+.synthesis-source-files
+.top-level-module

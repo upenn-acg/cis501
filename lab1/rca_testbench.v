@@ -144,6 +144,8 @@ module test_adders;
       
       
       $display("Simulation finished: %d test cases %d errors", tests, errors);
+      $display("<scorePossible>%d</scorePossible>", tests);
+      $display("<scoreActual>%d</scoreActual>", tests - errors);
       $finish;
    end
 

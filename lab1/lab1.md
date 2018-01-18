@@ -115,7 +115,7 @@ There are other interesting reports in the `output/` directory. We'll dig into
 these more in future labs, but here's a quick summary:
 
 + `post_synth_utilization.txt` shows how much of the FPGA's resources (LUTs, registers, block RAMs, etc.) were used by the design.
-+ `post_synth_timing_summary_report.txt` discusses whether the design met its timing constraints or not. The circuit in this lab is purely combinational so there are no timing constraints to satisfy.
++ `post_synth_timing_summary_report.txt` discusses whether the design met its timing constraints or not. The modules in this lab do not have any timing constraints to satisfy, so this report is pretty vacuous for now.
 
 ## Revisiting the Tests
 

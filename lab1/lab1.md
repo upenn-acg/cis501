@@ -144,7 +144,7 @@ toggle switches at the bottom of the Zedboard are used to input two 4-bit
 integers, and their 4-bit sum is displayed on the lowest-order 4 LEDs. The TAs
 will try a few different inputs to verify that your adder works as it should.
 
-TODO: instructions about programming the Zedboards
+See [instructions about programming the ZedBoard](https://docs.google.com/presentation/d/1spwy8Ech3oLO72_VbKN5WkDlwbWy0WWISxv_lMjhRkg/edit?usp=sharing).
 
 
 

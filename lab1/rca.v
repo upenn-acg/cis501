@@ -6,7 +6,7 @@
 `default_nettype none
 
 /* A half-adder that adds two 1-bit numbers and produces a 2-bit result (as sum
-/* and carry-out) */
+ * and carry-out) */
 module halfadder(input wire  a,
                  input wire  b,
                  output wire s,
@@ -16,7 +16,7 @@ module halfadder(input wire  a,
 endmodule
 
 /* A full adder adds three 1-bit numbers (a, b, carry-in) and produces a 2-bit
-/* result (as sum and carry-out) */
+ * result (as sum and carry-out) */
 module fulladder(input wire  cin,
                  input wire  a,
                  input wire  b,
@@ -42,8 +42,8 @@ module fulladder2(input wire        cin,
 endmodule
 
 /* 4-bit ripple-carry adder that adds two 4-bit numbers (taken from the
-/* ZedBoard's switches) and produces a 4-bit result (displayed on the ZedBoard's
-/* LEDs) */
+ * ZedBoard's switches) and produces a 4-bit result (displayed on the ZedBoard's
+ * LEDs) */
 module rca4(input wire  [7:0] SWITCH,
             output wire [7:0] LED);
    wire cout0; 

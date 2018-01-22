@@ -162,8 +162,8 @@ When implementation completes, it should create a bitstream file `output/rca4.bi
 
 The simplest way to program the ZedBoards is to use the Linux machines in the K
 Lab. Note that each station in the K Lab has both a Windows *and* a Linux
-machine. You can switch between them via the KVM switch beneath the monitor: the
-Linux machine is typically **input 2**.
+machine. You can switch between them via the KVM (keyboard/video/mouse) switch
+beneath the monitor: the Linux machine is typically **input 2**.
 
 Once you login to the machine, connect your ZedBoard. Note that the Linux
 machines in the K Lab are the machines **with all-black USB ports on the

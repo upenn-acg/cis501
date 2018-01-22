@@ -41,6 +41,11 @@ wave: snapshot.sim
 impl: setup-files $(SOURCES)
 	$(time) vivado -mode batch -source $(TCL_DIR)/implement.tcl
 
+# program the device with user-specified bitstream
+program:
+	@echo -n "Specify .bit file to use to program FPGA, then press [ENTER]: "
+	@read bitfile && export BITSTREAM_FILE=$$bitfile && $(time) vivado -mode batch -notrace -source $(TCL_DIR)/program.tcl
+
 # place arguments to Tcl synthesis/implementation scripts into hidden files
 setup-files:
 	echo -n $(SOURCES) > .synthesis-source-files

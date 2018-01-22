@@ -139,22 +139,50 @@ to write your own, smaller testbench (or comment out parts of `rca_testbench.v`)
 so that you can run just the input of interest. Start by debugging the lowest-level
 module, since those bugs may be the root cause of failures in other higher-level modules.
 
-## Wrapping Up
-
-### Submitting Code
+## Submitting Code
 
 Once your code passes all the tests, you are ready to submit it **via Canvas**.
 
-### Zedboard Demo
+## Zedboard Demo
 
 You also **need to demo** your working design on the Zedboards in the K Lab. The
 toggle switches at the bottom of the Zedboard are used to input two 4-bit
 integers, and their 4-bit sum is displayed on the lowest-order 4 LEDs. The TAs
 will try a few different inputs to verify that your adder works as it should.
 
-See [instructions about programming the ZedBoard](https://docs.google.com/presentation/d/1spwy8Ech3oLO72_VbKN5WkDlwbWy0WWISxv_lMjhRkg/edit?usp=sharing).
+### Generating a bitstream
 
+Run the command `make impl` to generate a `.bit` bitstream file. This will run
+the *implementation* step of the FPGA design flow, mapping your design onto the
+ZedBoard's hardware. It will take a few minutes. 
 
+When implementation completes, it should create a bitstream file `output/rca4.bit`.
+
+### Programming via Linux command line (recommended)
+
+The simplest way to program the ZedBoards is to use the Linux machines in the K
+Lab. Note that each station in the K Lab has both a Windows *and* a Linux
+machine. You can switch between them via the KVM switch beneath the monitor: the
+Linux machine is typically **input 2**.
+
+Once you login to the machine, connect your ZedBoard. Note that the Linux
+machines in the K Lab are the machines **with all-black USB ports on the
+front**. The machines with the blue USB 3.0 ports are the Windows machines.
+
+Follow the [instructions for connecting the
+ZedBoard](https://docs.google.com/presentation/d/1spwy8Ech3oLO72_VbKN5WkDlwbWy0WWISxv_lMjhRkg/edit?usp=sharing),
+and then switch to the terminal (the Konsole application works well). From the
+lab1 directory, run the command `make program`. You will be prompted for the
+`.bit` bitstream file you want to use, and then the FPGA should get programmed
+accordingly.
+
+#### Programming via Vivado GUI
+
+You can also program the ZedBoard via the Vivado GUI. See [instructions for Windows here](https://docs.google.com/presentation/d/1spwy8Ech3oLO72_VbKN5WkDlwbWy0WWISxv_lMjhRkg/edit?usp=sharing). 
+
+You can use similar instructions to program via the Vivado GUI on the K Lab Linux machines. Start Vivado by running the usual `source ...` command to get the Vivado tools onto your PATH, then run the command `vivado &` on the command line and the GUI should appear within a few moments. You can then follow the Windows tutorial linked above as the menus are identical.
+
+In our experience, the Linux version is substantially more responsive than the Windows version (not Windows fault, it's due to the way that the Windows version of Vivado is installed onto a network drive).
 
 
 

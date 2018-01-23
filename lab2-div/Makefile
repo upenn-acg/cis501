@@ -4,9 +4,11 @@ endif
 
 # source verilog files
 SOURCES=lc4_divider.v
+TOP_MODULE=lc4_divider
 
 # testbench file
 TESTBENCH=lc4_divider_testbench.v
+TOP_TESTBENCH_MODULE=test_divider
 
 # shorthand variables for constraint files and Tcl scripts
 COMMON_DIR=../common
@@ -27,7 +29,7 @@ synth: setup-files $(SOURCES)
 snapshot.sim: $(SOURCES) $(TESTBENCH)
 	rm -rf xsim.dir/
 	echo -n verilog mylib $^ > .prj
-	xelab -cc gcc --debug typical --prj .prj --snapshot $@ --lib mylib mylib.test_divider
+	xelab -cc gcc --debug typical --prj .prj --snapshot $@ --lib mylib mylib.$(TOP_TESTBENCH_MODULE)
 
 # run all tests
 test: snapshot.sim
@@ -49,7 +51,7 @@ program:
 # place arguments to Tcl synthesis/implementation scripts into hidden files
 setup-files:
 	echo -n $(SOURCES) > .synthesis-source-files
-	echo -n lc4_divider > .top-level-module
+	echo -n $(TOP_MODULE) > .top-level-module
 	echo -n $(XDC_DIR)/physical-leds-switches.xdc > .constraint-files
 	echo -n div.bit > .bitstream-filename
 

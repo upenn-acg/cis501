@@ -20,7 +20,7 @@ time=time -f "Vivado took %E m:s and %M KB"
 # if invoked with no explicit target, print out a help message
 .DEFAULT: help
 help:
-	@echo -e "Valid targets are:\n  synth\n  sim\n  impl\n  clean"
+	@echo -e "Valid targets are: synth test debug impl program clean"
 
 # run synthesis to identify code errors/warnings
 synth: setup-files $(SOURCES)
@@ -36,7 +36,7 @@ test: snapshot.sim
 	xsim $^ --runall --stats -wdb sim.wdb
 
 # investigate waveforms via xsim GUI
-wave: snapshot.sim
+debug: snapshot.sim
 	xsim $^ --gui -wdb sim.wdb # investigate waveforms via GUI
 
 # run synthesis & implementation to generate a bitstream

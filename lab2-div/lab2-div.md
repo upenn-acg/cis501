@@ -56,7 +56,3 @@ Makefile with the command `make test`.
 ## Submitting your code
 
 As with previous labs, submit your code via Canvas.
-
-## ZedBoard demo
-
-TBD

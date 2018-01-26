@@ -50,13 +50,13 @@ module test_divider;
       #2;
 
       // loop 2000 times, with a one-indexed number for each test
-      for (tests = 1; tests <= 2000; tests = tests + 1) begin
+      for (tests = 1; tests <= 4000;) begin
 
          // set random dividend and divisor
          i_dividend = $random;
          i_divisor = $random;
 
-         if(tests > 1000) begin
+         if(tests > 2000) begin
             i_divisor = 16'h0000;
          end
 
@@ -85,6 +85,7 @@ module test_divider;
                      o_quotient[15:12], o_quotient[11:8], o_quotient[7:4], o_quotient[3:0], o_quotient);
             errors = errors + 1;
          end
+         tests = tests + 1;
 
          // check if the expected and computed remainders match; print error otherwise
          if (exp_remainder !== o_remainder) begin
@@ -96,6 +97,7 @@ module test_divider;
                      o_remainder[15:12], o_remainder[11:8], o_remainder[7:4], o_remainder[3:0], o_remainder);
             errors = errors + 1;
          end
+         tests = tests + 1;
 
          #2; // wait some more
 

@@ -1,3 +1,7 @@
+The LC4 ALU module performs all of the arithmetic and logical
+operations for the various instructions. In this lab you'll build a
+self-contained ALU datapath with the corresponding control signals.
+
 ## ALU Specification
 
 Your code should live in the `lc4_alu` module. This module takes a

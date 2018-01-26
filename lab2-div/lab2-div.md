@@ -15,7 +15,7 @@ The module takes as input two 16-bit data values (dividend and
 divisor) and outputs two 16-bit values (remainder and quotient). It
 should use the following algorithm:
 
-```
+```c
 int divide(int dividend, int divisor) {
     int quotient = 0;
     int remainder = 0;

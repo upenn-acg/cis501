@@ -50,13 +50,13 @@ module test_divider;
       #2;
 
       // loop 2000 times, with a one-indexed number for each test
-      for (tests = 1; tests <= 4000;) begin
+      for (tests = 0; tests < 4000;) begin
 
          // set random dividend and divisor
          i_dividend = $random;
          i_divisor = $random;
 
-         if(tests > 2000) begin
+         if(tests >= 2000) begin
             i_divisor = 16'h0000;
          end
 

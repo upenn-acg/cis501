@@ -14,8 +14,8 @@
 `timescale 1ns / 1ps
 
 module test_divider;
-   // status variables (number of errors and line number
-   integer     errors, linenum;
+   // status variables (number of errors and total number of tests)
+   integer     errors, tests;
 
    // input variables (registers so we can generate them here)
    reg [15:0] i_dividend;
@@ -49,14 +49,14 @@ module test_divider;
 
       #2;
 
-      // loop 2000 times, with a one-indexed line number
-      for (linenum = 1; linenum <= 2000; linenum = linenum + 1) begin
+      // loop 2000 times, with a one-indexed number for each test
+      for (tests = 1; tests <= 2000; tests = tests + 1) begin
 
          // set random dividend and divisor
          i_dividend = $random;
          i_divisor = $random;
 
-         if(linenum > 1000) begin
+         if(tests > 1000) begin
             i_divisor = 16'h0000;
          end
 
@@ -77,8 +77,8 @@ module test_divider;
 
          // check if the expected and computed quotients match; print error otherwise
          if (exp_quotient !== o_quotient) begin
-            $display("Error at line %d: i_dividend = %b %b %b %b (0x%H), i_divisor = %b %b %b %b (0x%H), o_quotient should have been %b %b %b %b (0x%H), but was %b %b %b %b (0x%H) instead",
-                     linenum,
+            $display("Error at test %d: i_dividend = %b %b %b %b (0x%H), i_divisor = %b %b %b %b (0x%H), o_quotient should have been %b %b %b %b (0x%H), but was %b %b %b %b (0x%H) instead",
+                     tests,
                      i_dividend[15:12], i_dividend[11:8], i_dividend[7:4], i_dividend[3:0], i_dividend,
                      i_divisor[15:12], i_divisor[11:8], i_divisor[7:4], i_divisor[3:0], i_divisor,
                      exp_quotient[15:12], exp_quotient[11:8], exp_quotient[7:4], exp_quotient[3:0], exp_quotient,
@@ -88,8 +88,8 @@ module test_divider;
 
          // check if the expected and computed remainders match; print error otherwise
          if (exp_remainder !== o_remainder) begin
-            $display("Error at line %d: i_dividend = %b %b %b %b (0x%H), i_divisor = %b %b %b %b (0x%H), o_remainder should have been %b %b %b %b (0x%H), but was %b %b %b %b (0x%H) instead",
-                     linenum,
+            $display("Error at test %d: i_dividend = %b %b %b %b (0x%H), i_divisor = %b %b %b %b (0x%H), o_remainder should have been %b %b %b %b (0x%H), but was %b %b %b %b (0x%H) instead",
+                     tests,
                      i_dividend[15:12], i_dividend[11:8], i_dividend[7:4], i_dividend[3:0], i_dividend,
                      i_divisor[15:12], i_divisor[11:8], i_divisor[7:4], i_divisor[3:0], i_divisor,
                      exp_remainder[15:12], exp_remainder[11:8], exp_remainder[7:4], exp_remainder[3:0], exp_remainder,
@@ -101,7 +101,10 @@ module test_divider;
 
       end // end for
 
-      $display("Simulation finished: %d test cases %d errors", linenum, errors);
+      $display("Simulation finished: %d test cases %d errors", tests, errors);
+      $display("<scorePossible>%d</scorePossible>", tests);
+      $display("<scoreActual>%d</scoreActual>", tests - errors);
+
       $finish;
    end
 

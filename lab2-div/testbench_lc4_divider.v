@@ -34,10 +34,13 @@ module test_divider;
    reg [15:0] i_quotient;
    
    // output variables (wires because the result comes from the divider outputs)
-   wire [15:0] o_dividend;
-   wire [15:0] o_remainder;
-   wire [15:0] o_quotient;
+   wire [15:0] o_1iter_dividend;
+   wire [15:0] o_1iter_remainder;
+   wire [15:0] o_1iter_quotient;
 
+   wire [15:0] o_div_remainder;
+   wire [15:0] o_div_quotient;
+   
    // expected values
    reg [15:0] exp_dividend;
    reg [15:0] exp_remainder;
@@ -45,12 +48,12 @@ module test_divider;
 
    // instantiate the Units Under Test (UUT)
    lc4_divider div(.i_dividend(i_dividend), .i_divisor(i_divisor),
-                   .o_remainder(o_remainder), .o_quotient(o_quotient));
+                   .o_remainder(o_div_remainder), .o_quotient(o_div_quotient));
 
    lc4_divider_one_iter divider_iter(.i_dividend(i_dividend), .i_divisor(i_divisor), 
                                      .i_remainder(i_remainder), .i_quotient(i_quotient), 
-                                     .o_dividend(o_dividend), .o_remainder(o_remainder),
-                                     .o_quotient(o_quotient));
+                                     .o_dividend(o_1iter_dividend), .o_remainder(o_1iter_remainder),
+                                     .o_quotient(o_1iter_quotient));
 
 
    initial begin // start testbench block
@@ -83,7 +86,7 @@ module test_divider;
          allTests = allTests + 1;
          
          // print an error if one occurred
-         if (o_dividend !== exp_dividend || o_remainder != exp_remainder || o_quotient != exp_quotient) begin
+         if (o_1iter_dividend !== exp_dividend || o_1iter_remainder != exp_remainder || o_1iter_quotient != exp_quotient) begin
             errors = errors + 1;
 
             // break up all binary values into groups of four bits for readability
@@ -128,26 +131,26 @@ module test_divider;
          end
 
          // check if the expected and computed quotients match; print error otherwise
-         if (exp_quotient !== o_quotient) begin
+         if (exp_quotient !== o_div_quotient) begin
             $display("[lc4_divider] Error at test %d: i_dividend = %b %b %b %b (0x%H), i_divisor = %b %b %b %b (0x%H), o_quotient should have been %b %b %b %b (0x%H), but was %b %b %b %b (0x%H) instead",
                      divTests,
                      i_dividend[15:12], i_dividend[11:8], i_dividend[7:4], i_dividend[3:0], i_dividend,
                      i_divisor[15:12], i_divisor[11:8], i_divisor[7:4], i_divisor[3:0], i_divisor,
                      exp_quotient[15:12], exp_quotient[11:8], exp_quotient[7:4], exp_quotient[3:0], exp_quotient,
-                     o_quotient[15:12], o_quotient[11:8], o_quotient[7:4], o_quotient[3:0], o_quotient);
+                     o_div_quotient[15:12], o_div_quotient[11:8], o_div_quotient[7:4], o_div_quotient[3:0], o_div_quotient);
             errors = errors + 1;
          end
          divTests = divTests + 1;
          allTests = allTests + 1; 
 
          // check if the expected and computed remainders match; print error otherwise
-         if (exp_remainder !== o_remainder) begin
+         if (exp_remainder !== o_div_remainder) begin
             $display("[lc4_divider] Error at test %d: i_dividend = %b %b %b %b (0x%H), i_divisor = %b %b %b %b (0x%H), o_remainder should have been %b %b %b %b (0x%H), but was %b %b %b %b (0x%H) instead",
                      divTests,
                      i_dividend[15:12], i_dividend[11:8], i_dividend[7:4], i_dividend[3:0], i_dividend,
                      i_divisor[15:12], i_divisor[11:8], i_divisor[7:4], i_divisor[3:0], i_divisor,
                      exp_remainder[15:12], exp_remainder[11:8], exp_remainder[7:4], exp_remainder[3:0], exp_remainder,
-                     o_remainder[15:12], o_remainder[11:8], o_remainder[7:4], o_remainder[3:0], o_remainder);
+                     o_div_remainder[15:12], o_div_remainder[11:8], o_div_remainder[7:4], o_div_remainder[3:0], o_div_remainder);
             errors = errors + 1;
          end
          divTests = divTests + 1;

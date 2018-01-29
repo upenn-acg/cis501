@@ -16,7 +16,7 @@ __check_defined = \
     $(if $(value $1),, \
       $(error Undefined $1$(if $2, ($2))))
 
-$(call check_defined, SOURCES TOP_MODULE TESTBENCH TOP_TESTBENCH_MODULE BITSTREAM_FILENAME, Each lab Makefile should define this)
+$(call check_defined, SOURCES TOP_MODULE TESTBENCH TOP_TESTBENCH_MODULE CONSTRAINTS BITSTREAM_FILENAME, Each lab Makefile should define this)
 
 # shorthand variables for constraint files and Tcl scripts
 # NB: COMMON_DIR is wrt the Makefile in each lab's directory, not wrt this file
@@ -62,7 +62,7 @@ setup-files:
 	echo -n $(TOP_MODULE) > .top-level-module
 	echo -n $(TESTBENCH) > .simulation-source-files
 	echo -n $(TOP_TESTBENCH_MODULE) > .top-level-testbench
-	echo -n $(XDC_DIR)/physical-leds-switches.xdc > .constraint-files
+	echo -n $(CONSTRAINTS) > .constraint-files
 	echo -n $(BITSTREAM_FILENAME) > .bitstream-filename
 
 # remove Vivado logs and our hidden files

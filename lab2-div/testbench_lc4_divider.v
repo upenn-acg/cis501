@@ -90,10 +90,28 @@ module test_divider;
             errors = errors + 1;
 
             // break up all binary values into groups of four bits for readability
-            $write("[lc4_divider_one_iter] Error at line %04d: ",    allTests);
+            $display("[lc4_divider_one_iter] Error at test %04d: i_dividend = %b %b %b %b (0x%H), i_divisor = %b %b %b %b (0x%H), i_remainder = %b %b %b %b (0x%H), i_quotient = %b %b %b %b (0x%H)", allTests,
+                     i_dividend[15:12], i_dividend[11:8], i_dividend[7:4], i_dividend[3:0], i_dividend,
+                     i_divisor[15:12], i_divisor[11:8], i_divisor[7:4], i_divisor[3:0], i_divisor,
+                     i_remainder[15:12], i_remainder[11:8], i_remainder[7:4], i_remainder[3:0], i_remainder,
+                     i_quotient[15:12], i_quotient[11:8], i_quotient[7:4], i_quotient[3:0], i_quotient); 
+
+            if (o_1iter_dividend !== exp_dividend) begin
+               $display("   o_dividend should have been %b %b %b %b (0x%H), but was %b %b %b %b (0x%H) instead",
+                        exp_dividend[15:12], exp_dividend[11:8], exp_dividend[7:4], exp_dividend[3:0], exp_dividend,
+                        o_1iter_dividend[15:12], o_1iter_dividend[11:8], o_1iter_dividend[7:4], o_1iter_dividend[3:0], o_1iter_dividend); 
+            end
+            if (o_1iter_remainder !== exp_remainder) begin
+               $display("   o_remainder should have been %b %b %b %b (0x%H), but was %b %b %b %b (0x%H) instead",
+                        exp_remainder[15:12], exp_remainder[11:8], exp_remainder[7:4], exp_remainder[3:0], exp_remainder,
+                        o_1iter_remainder[15:12], o_1iter_remainder[11:8], o_1iter_remainder[7:4], o_1iter_remainder[3:0], o_1iter_remainder); 
+            end
+            if (o_1iter_quotient !== exp_quotient) begin
+               $display("   o_quotient should have been %b %b %b %b (0x%H), but was %b %b %b %b (0x%H) instead",
+                        exp_quotient[15:12], exp_quotient[11:8], exp_quotient[7:4], exp_quotient[3:0], exp_quotient,
+                        o_1iter_quotient[15:12], o_1iter_quotient[11:8], o_1iter_quotient[7:4], o_1iter_quotient[3:0], o_1iter_quotient); 
+            end
             
-            $display(""); // add a newline
-            //$finish;
          end
          
          #2;

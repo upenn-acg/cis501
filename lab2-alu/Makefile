@@ -7,7 +7,7 @@ TESTBENCH=testbench_lc4_alu.v
 TOP_TESTBENCH_MODULE=test_alu
 
 # NB: $(XDC_DIR) defined in vivado.mk
-CONSTRAINTS=$(XDC_DIR)/physical-leds-switches.xdc
+CONSTRAINTS=$(XDC_DIR)/empty.xdc
 
 BITSTREAM_FILENAME=alu.bit
 

@@ -15,7 +15,7 @@ DIV and MOD. **Do not use Verilog's `/` and `%` operators. They will
 not synthesize.**
 + Memory operations (LDR, STR): output the generated effective memory address.
 + Comparison instructions (CMP, CMPU, CMPI, CMPIU): Output zero (`0000 0000 0000 0000`), one (`0000 0000 0000 0001`), or negative one (`1111 1111 1111 1111`), depending on the result of the comparison. This will be used later to set the NZP bits.
-+ Branch instructions (BR, JMP, JMPR, JSR, RTI, TRAP), the PC of the next instruction *if the branch were to be taken*. The ALU should not decide whether or not the branch actually will be taken, that will be done elsewhere in the datapath.
++ Branch instructions (BR, JMP, JMPR, JSR, JSRR, RTI, TRAP), the PC of the next instruction *if the branch were to be taken*. The ALU should not decide whether or not the branch actually will be taken, that will be done elsewhere in the datapath.
 + No-op (NOP) should be treated as if it is a branch instruction. When you implement your full datapath, the branch will simply not be taken on NOP instructions.
 + All other operations: output zero (`0000 0000 0000 0000`).
 
@@ -24,7 +24,7 @@ not synthesize.**
 + **Do not start implementing until your schematic is complete!**
 + Implement the basic ALU operations, including `+` and `*` using the built-in Verilog operators.
 + Implement DIV and MOD using your `lc4_divider` module.
-+ For shift operations, we recommend a barrel shifter as described in lecture.
++ For shift operations, we recommend using the built-in `<<`, `>>` and `>>>` Verilog shift operators.
 + For comparisons, we recommend extending the input values to 17 bits using zero extension for unsigned comparisons, and sign extension for signed comparisons. Perform the subtraction, then set the output accordingly.
 
 ## Testing

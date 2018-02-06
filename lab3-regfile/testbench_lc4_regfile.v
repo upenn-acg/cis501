@@ -11,6 +11,7 @@
 `define NULL 0
 
 `define REGISTER_INPUT "test_lc4_regfile.input"
+`define REGISTER_OUTPUT "regfile_test.output.txt"
 
 module test_regfile;
 

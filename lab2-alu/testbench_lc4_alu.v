@@ -8,7 +8,7 @@
 `define INPUT "test_lc4_alu.input"
 `endif
 
-`define OUTPUT "../../../test_lc4_alu.output"
+`define OUTPUT "test_lc4_alu.output"
 
 module test_alu;
 
@@ -16,7 +16,7 @@ module test_alu;
    // so they are easier to understand
    `include "lc4_prettyprint_errors.v"
 
-   // debuggin state variables
+   // debugging state variables
    integer  input_file, output_file, errors, tests;
    reg [15:0] expected_result;
 

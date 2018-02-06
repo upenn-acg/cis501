@@ -24,14 +24,13 @@ not synthesize.**
 + **Do not start implementing until your schematic is complete!**
 + Implement the basic ALU operations, including `+` and `*` using the built-in Verilog operators.
 + Implement DIV and MOD using your `lc4_divider` module.
-+ For shift operations, we recommend using the built-in `<<`, `>>` and `>>>` Verilog shift operators.
++ For shift operations, you need to build a barrel shifter.
 + For comparisons, we recommend extending the input values to 17 bits using zero extension for unsigned comparisons, and sign extension for signed comparisons. Perform the subtraction, then set the output accordingly.
 
 ## Testing
 
 The testbench of the ALU is in `testbench_lc4_alu.v`, which internally
-uses `lc4_prettyprint_errors.v` and the input trace
-`test_lc4_alu.input`.
+uses `lc4_prettyprint_errors.v` and the input trace `test_lc4_alu.input`.
 
 The testbench reads a series of instructions, PC, register values, and
 expected results from the input trace, executes them on your ALU,
@@ -41,4 +40,18 @@ in assembly format for easier cross-referencing with the [LC4 ISA documentation]
 
 ## ZedBoard demo
 
-TBD
+This demo allows you to run a series of test inputs through your
+ALU. The inputs, and your ALU's output, are shown on the ZedBoard's
+OLED display (yellow box in the picture below). You can use the 5
+low-order switches (orange box) to switch among the 32 test
+inputs.
+
+**To preserve the life of the OLED display** you **must** power it off
+  before you shut off power to the ZedBoard. Do this via the
+  direction-pad button closest to the switches (`BTNL` aka `N15`, the
+  red box in the picture below). The rightmost LED (green box) lights
+  up whenever the OLED display is on. When you press the OLED on/off
+  button, the display (and the LED) go off, letting you know that
+  you've powered down the display appropriately.
+
+![](zedboard-lab2.jpeg)

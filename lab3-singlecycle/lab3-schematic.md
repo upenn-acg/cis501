@@ -8,6 +8,7 @@ Your schematics may be hand-drawn or computerized (most people feel hand-drawn i
 
 + You **do not** have to include the `rst` and `gwe` ports and wires on these schematics. You **do** need to mark the clock port (with a little triangle), but you do not need to draw the clock wires.
 + You **do not** need to redraw or resubmit the ALU and divider schematics, since you presumably are not re-implementing that code. It's fine to draw the ALU as a box with its ports.
++ You **do not** need to make schematics of the memory or the instruction decoder since we provide them for you.
 + You **do not** need to include the `switch_data`, `seven_segment_data`, and `led_data` wires in your schematic (they are optional and not worth any points).
 + You **do** need to include the branch logic.
 + You **do** need to include the `test_*` wires on your schematic. Getting these right the first time around can save you hours of debugging. (`test_stall` is hard-wired to 0 on this lab, but include it in the schematic anyway.)

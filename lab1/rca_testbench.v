@@ -28,7 +28,7 @@ module test_adders;
    fulladder2 fa2(.cin(cin), .a(a2), .b(b2), .s(actual_fa2_sum), .cout(actual_fa2_cout)); 
 
    reg [3:0]   a4, b4, exp_rca4_sum;
-   wire [3:0]  actual_rca4_sum; 
+   wire [7:0]  actual_rca4_sum; 
    rca4 r0(.SWITCH({b4,a4}), .LED(actual_rca4_sum));
    
    

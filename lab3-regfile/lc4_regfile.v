@@ -4,7 +4,6 @@
  * lc4_regfile.v
  * Implements an 8-register register file parameterized on word size.
  *
- * TODO: Contributions of each group member to this file
  */
 
 `timescale 1ns / 1ps

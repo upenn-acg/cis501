@@ -1,6 +1,6 @@
 /* test_lc4_regfile
  *
- * Testbench for teh register file
+ * Testbench for the register file
  */
 
 `timescale 1ns / 1ps

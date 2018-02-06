@@ -51,7 +51,7 @@ inputs.
   direction-pad button closest to the switches (`BTNL` aka `N15`, the
   red box in the picture below). The rightmost LED (green box) lights
   up whenever the OLED display is on. When you press the OLED on/off
-  switch, the display (and the LED) go off, letting you know that
+  button, the display (and the LED) go off, letting you know that
   you've powered down the display appropriately.
 
 ![](zedboard-lab2.jpeg)

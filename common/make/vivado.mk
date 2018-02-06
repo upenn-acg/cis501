@@ -16,7 +16,8 @@ __check_defined = \
     $(if $(value $1),, \
       $(error Undefined $1$(if $2, ($2))))
 
-$(call check_defined, SOURCES TOP_MODULE TESTBENCH TOP_TESTBENCH_MODULE CONSTRAINTS BITSTREAM_FILENAME, Each lab Makefile should define this)
+$(call check_defined, SOURCES TOP_SYNTH_MODULE TESTBENCH TOP_TESTBENCH_MODULE, Each lab Makefile should define this)
+#NB: TOP_IMPL_MODULE BITSTREAM_FILENAME CONSTRAINTS are just for labs that run through implementation
 
 # shorthand variables for constraint files and Tcl scripts
 # NB: COMMON_DIR is wrt the Makefile in each lab's directory, not wrt this file
@@ -33,7 +34,8 @@ help:
 
 # run synthesis to identify code errors/warnings
 synth: setup-files $(SOURCES)
-	$(time) vivado -mode batch -source $(TCL_DIR)/synthesize.tcl
+	echo -n "synthesis" > .step
+	$(time) vivado -mode batch -source $(TCL_DIR)/build.tcl
 
 # run all tests
 test: $(SOURCES) $(TESTBENCH)
@@ -49,7 +51,8 @@ debug: setup-files
 
 # run synthesis & implementation to generate a bitstream
 impl: setup-files $(SOURCES)
-	$(time) vivado -mode batch -source $(TCL_DIR)/implement.tcl
+	echo -n "implementation" > .step
+	$(time) vivado -mode batch -source $(TCL_DIR)/build.tcl
 
 # program the device with user-specified bitstream
 program:
@@ -59,16 +62,18 @@ program:
 # place arguments to Tcl debug/synthesis/implementation scripts into hidden files
 setup-files:
 	echo -n $(SOURCES) > .synthesis-source-files
-	echo -n $(TOP_MODULE) > .top-level-module
+	echo -n $(IP_BLOCKS) > .ip-blocks
+	echo -n $(TOP_SYNTH_MODULE) > .top-synth-module
+	echo -n $(TOP_IMPL_MODULE) > .top-impl-module
 	echo -n $(TESTBENCH) > .simulation-source-files
 	echo -n $(TOP_TESTBENCH_MODULE) > .top-level-testbench
 	echo -n $(CONSTRAINTS) > .constraint-files
 	echo -n $(BITSTREAM_FILENAME) > .bitstream-filename
 
-# remove Vivado logs and our hidden files
+# remove Vivado logs and our hidden file
 clean:
 	rm -f webtalk*.log webtalk*.jou vivado*.log vivado*.jou xsim*.log xsim*.jou xelab*.log xelab*.jou vivado_pid*.str usage_statistics_webtalk.*ml
-	rm -f .synthesis-source-files .simulation-source-files .top-level-module .top-level-testbench .constraint-files .bitstream-filename .prj
+	rm -f .synthesis-source-files .simulation-source-files .ip-blocks .top-synth-module .top-impl-module .top-level-testbench .constraint-files .bitstream-filename .prj
 	rm -rf xsim.dir/ .Xil/ xelab.pb 
 
 # clean, then remove output/ directory: use with caution!

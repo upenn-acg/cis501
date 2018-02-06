@@ -12,11 +12,22 @@ usage_statistics_webtalk.*ml
 .Xil/
 snapshot.sim
 sim.wdb
+
+# IP-related files
+*.mif
+*.veo
+*.vho
+
+# hidden files created by our Makefile system
 .bitstream-filename
 .constraint-files
-.synthesis-source-files
-.top-level-module
 .debug-project/
+.ip-blocks
 .prj
 .simulation-source-files
+.step
+.synthesis-source-files
+.top-impl-module
+.top-level-module
 .top-level-testbench
+.top-synth-module

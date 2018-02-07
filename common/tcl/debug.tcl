@@ -20,10 +20,12 @@ set_property board_part em.avnet.com:zed:part0:1.3 [current_project]
 
 add_files -fileset sources_1 [get_file_contents .synthesis-source-files]
 add_files -fileset sim_1 [get_file_contents .simulation-source-files]
-add_files -fileset constrs_1 [get_file_contents .constraint-files]
+if { [string length [get_file_contents .constraint-files]] > 0 } {
+    add_files -fileset constrs_1 [get_file_contents .constraint-files]
+}
 
 # Update compile order for the source and simulation filesets
-set_property top [get_file_contents .top-level-module] [get_filesets sources_1]
+set_property top [get_file_contents .top-synth-module] [get_filesets sources_1]
 set_property top [get_file_contents .top-level-testbench] [get_filesets sim_1]
 update_compile_order -fileset sources_1
 update_compile_order -fileset sim_1

@@ -15,11 +15,6 @@ proc get_file_contents { filename } {
 
 read_verilog [get_file_contents .synthesis-source-files]
 
-# only add constraint files if there are any
-if { [string length [get_file_contents .constraint-files]] > 0 } {
-    read_xdc [get_file_contents .constraint-files]
-}
-
 # Need to set_part so that IP blocks work correctly
 # https://forums.xilinx.com/t5/Vivado-TCL-Community/project-part-don-t-match-when-run-tcl-command/td-p/440404
 set_part xc7z020clg484-1
@@ -27,12 +22,12 @@ set_part xc7z020clg484-1
 # only add IP blocks if there are any
 if { [string length [get_file_contents .ip-blocks]] > 0 } {
     read_ip [get_file_contents .ip-blocks]
-}
 
-# generate synthesis targets for IP blocks, so they will get synthesized by synth_design below
-if { [llength [get_ips]] > 0 } {
-    generate_target all [get_ips]
-    #synth_ip [get_ips charLib init_sequence_rom pixel_buffer] # <- doesn't work for some reason
+    # generate synthesis targets for IP blocks, so they will get synthesized by synth_design below
+    if { [llength [get_ips]] > 0 } {
+        generate_target all [get_ips]
+        #synth_ip [get_ips charLib init_sequence_rom pixel_buffer] # <- doesn't work for some reason
+    }
 }
 
 # synthesize for zedboard chip 
@@ -42,9 +37,14 @@ if {[get_file_contents .step] == "synthesis"} { # just doing synthesis
 
 } else { # going all the way to implementation instead
     if {[get_file_contents .top-impl-module] == ""} {
-        puts "ERROR: this design has no top-level module defined for implementation. It can only be run through synthesis."
-        exit
+        error "this design has no top-level module defined for implementation. It can only be run through synthesis."
     }
+
+    # only add constraint files if there are any
+    if { [string length [get_file_contents .constraint-files]] > 0 } {
+        read_xdc [get_file_contents .constraint-files]
+    }
+
     synth_design -top [get_file_contents .top-impl-module] -part xc7z020clg484-1
 }
 

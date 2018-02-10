@@ -17,7 +17,8 @@ __check_defined = \
       $(error Undefined $1$(if $2, ($2))))
 
 $(call check_defined, SOURCES TOP_SYNTH_MODULE TESTBENCH TOP_TESTBENCH_MODULE, Each lab Makefile should define this)
-#NB: TOP_IMPL_MODULE BITSTREAM_FILENAME CONSTRAINTS are just for labs that run through implementation
+# NB: TOP_IMPL_MODULE BITSTREAM_FILENAME CONSTRAINTS are just for labs that run through implementation
+# NB: ZIP_SORUCES ZIP_FILE defined just for labs where multiple source files must be submitted
 
 # shorthand variables for constraint files and Tcl scripts
 # NB: COMMON_DIR is wrt the Makefile in each lab's directory, not wrt this file
@@ -58,6 +59,9 @@ impl: setup-files $(SOURCES)
 program:
 	@echo -n "Specify .bit file to use to program FPGA, then press [ENTER]: "
 	@read bitfile && export BITSTREAM_FILE=$$bitfile && $(time) vivado -mode batch -notrace -source $(TCL_DIR)/program.tcl
+
+zip: $(SOURCES)
+	zip $(ZIP_FILE) $(ZIP_SOURCES)
 
 # place arguments to Tcl debug/synthesis/implementation scripts into hidden files
 setup-files:

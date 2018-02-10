@@ -42,8 +42,7 @@ if {[get_file_contents .step] == "synthesis"} { # just doing synthesis
 
 } else { # going all the way to implementation instead
     if {[get_file_contents .top-impl-module] == ""} {
-        puts "ERROR: this design has no top-level module defined for implementation. It can only be run through synthesis."
-        exit
+        error "This design has no top-level module defined for implementation. It can only be run through synthesis."
     }
     synth_design -top [get_file_contents .top-impl-module] -part xc7z020clg484-1
 }

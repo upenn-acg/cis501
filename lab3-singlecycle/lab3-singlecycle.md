@@ -29,19 +29,20 @@ can use it to examine the state of your processor after all signals
 have stabilized. Detailed comments are included in the block to
 explain how to use it effectively.
 
-We provide a series of test benches for your processor, which you can
-select by uncommenting the appropriate line in `set_testcase.v`.
-
-TODO: You will need to restart the simulation after you change test
-cases, but you shouldn't need to re-synthesize or re-simulate. The
-test cases are:
-
+We provide a series of test cases for your processor:
 + `test_alu`: random ALU instructions, but no branches, loads, or stores.
 + `test_br`: random branch and ALU instructions, but no loads or stores.
 + `test_mem`: random ALU instructions, loads, and stores, but no branches.
++ `test_ld_br`: random ALU instructions, loads, stores and branches.
 + `test_all`: random ALU instructions of all types except RTI.
-+ `house`: a small, non-interactive program that draws the missile command houses on an attached VGA display. (You can simulate this in Vivado, but you'll need to program the Zedboard and hook up a display to see the drawing.)
-+ `wireframe`: Renders 3 wireframe cubes. This trace is 20 times longer than the others. (Program the Zedboard and hook up a display to see the drawing. Use the +-shaped button pad on the Zedboard to rotate the cubes.)
++ `house`: a small, non-interactive program that draws the houses from the game Missile Command.
++ `wireframe`: Renders 3 wireframe cubes. This trace is 20 times longer than the others.
+
+You can run a particular test case via a command like this:
+```
+TEST_CASE=test_mem make test
+```
+
 
 ## Demo
 

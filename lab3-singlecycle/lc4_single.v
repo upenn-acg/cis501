@@ -1,5 +1,4 @@
-/* TODO: Names of all group members
- * TODO: PennKeys of all group members
+/* TODO: name and PennKeys of all group members here
  *
  * lc4_single.v
  * Implements a single-cycle data path

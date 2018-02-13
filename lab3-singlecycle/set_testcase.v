@@ -4,7 +4,11 @@
  */
 
 `define CODE_PATH "test_data/"
-  
+
+`ifndef TEST_CASE
+`define TEST_CASE "test_alu"
+`endif
+
 /* Define the full paths to the trace, output, and hex files.
  * INPUT_FILE and OUTPUT_FILE are used by the testbench,
  * MEMORY_IMAGE_FILE is used by bram.v.

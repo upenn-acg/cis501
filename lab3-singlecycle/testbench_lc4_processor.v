@@ -58,7 +58,7 @@ module test_processor;
    
    wire [15:0] vout_dummy;  // video out
 
-   always #6 clk <= ~clk;
+   always #5 clk <= ~clk;
    
    // Produce gwe and other we signals using same modules as lc4_system
    wire        i1re, i2re, dre, gwe;

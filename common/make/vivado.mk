@@ -52,7 +52,7 @@ synth: setup-files $(SOURCES)
 test: $(SOURCES) $(TESTBENCH) .set_testcase.v
 	rm -rf xsim.dir/
 	echo -n verilog mylib $^ > .prj
-	xelab --define TEST_CASE=\"$(TEST_CASE)\" -cc gcc --debug typical --prj .prj --snapshot snapshot.sim --lib mylib mylib.$(TOP_TESTBENCH_MODULE)
+	xelab -cc gcc --debug typical --prj .prj --snapshot snapshot.sim --lib mylib mylib.$(TOP_TESTBENCH_MODULE)
 	xsim snapshot.sim --runall --stats -wdb sim.wdb
 
 # investigate design via GUI debugger
@@ -101,6 +101,8 @@ else
 	echo \`define MEMORY_IMAGE_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).hex\" >> $@
 endif
 endif
+else
+	touch $@
 endif
 
 # remove Vivado logs and our hidden file

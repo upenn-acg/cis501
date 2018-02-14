@@ -8,9 +8,8 @@
 `include "set_testcase.v"
 
 module test_processor;
-
    `include "include/lc4_prettyprint_errors.v"
-
+   
    integer     input_file, output_file, errors, linenum, tests;
    integer     num_cycles;
    integer     num_exec, num_cache_stall, num_branch_stall, num_load_stall;
@@ -33,7 +32,7 @@ module test_processor;
    wire [15:0] dmem_tworite;
    wire        dmem_we;
 
-   wire [1:0]  test_stall;        // Testbench: is this is stall cycle? (don't compare the test values)
+   wire [1:0]  test_stall;        // Testbench: is this a stall cycle? (don't compare the test values)
    wire [15:0] test_pc;           // Testbench: program counter
    wire [15:0] test_insn;         // Testbench: instruction bits
    wire        test_regfile_we;   // Testbench: register file write enable
@@ -42,8 +41,8 @@ module test_processor;
    wire        test_nzp_we;       // Testbench: NZP condition codes write enable
    wire [2:0]  test_nzp_new_bits; // Testbench: value to write to NZP bits
    wire        test_dmem_we;      // Testbench: data memory write enable
-   wire [15:0] test_dmem_addr;    // Testbench: address to write memory
-   wire [15:0] test_dmem_data;    // Testbench: value to write memory
+   wire [15:0] test_dmem_addr;    // Testbench: address to write to memory
+   wire [15:0] test_dmem_data;    // Testbench: value to write to memory
 
    reg  [15:0] verify_pc;
    reg  [15:0] verify_insn;
@@ -78,7 +77,7 @@ module test_processor;
 		      .gwe(gwe),
 		      .rst(rst),
                       .i1addr(cur_pc),
-		      .i2addr(16'd0),      // Not used for scalar processor
+		      .i2addr(16'd0),      // Not used for scalar processors
                       .i1out(cur_insn),
                       .daddr(dmem_addr),
 		      .din(dmem_tworite),
@@ -126,8 +125,7 @@ module test_processor;
       num_branch_stall = 0;
       num_load_stall = 0;
       file_status = 10;
-      
-      
+
       // open the test inputs
       input_file = $fopen(`INPUT_FILE, "r");
       if (input_file == `NULL) begin

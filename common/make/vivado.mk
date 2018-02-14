@@ -49,14 +49,22 @@ synth: setup-files $(SOURCES)
 	$(time) vivado -mode batch -source $(TCL_DIR)/build.tcl
 
 # run all tests
+ifdef NEEDS_TEST_CASE
 test: $(SOURCES) $(TESTBENCH) .set_testcase.v
+else
+test: $(SOURCES) $(TESTBENCH)
+endif
 	rm -rf xsim.dir/
 	echo -n verilog mylib $^ > .prj
 	xelab -cc gcc --debug typical --prj .prj --snapshot snapshot.sim --lib mylib mylib.$(TOP_TESTBENCH_MODULE)
 	xsim snapshot.sim --runall --stats -wdb sim.wdb
 
 # investigate design via GUI debugger
+ifdef NEEDS_TEST_CASE
 debug: setup-files .set_testcase.v
+else
+debug: setup-files
+endif
 	rm -rf .debug-project
 	vivado -mode batch -source $(TCL_DIR)/debug.tcl
 
@@ -101,8 +109,6 @@ else
 	echo \`define MEMORY_IMAGE_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).hex\" >> $@
 endif
 endif
-else
-	touch $@
 endif
 
 # remove Vivado logs and our hidden file

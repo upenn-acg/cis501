@@ -22,8 +22,10 @@ sim.wdb
 .bitstream-filename
 .constraint-files
 .debug-project/
+.implementation-source-files
 .ip-blocks
 .prj
+.set_testcase.v
 .simulation-source-files
 .step
 .synthesis-source-files

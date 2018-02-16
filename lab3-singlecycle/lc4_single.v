@@ -40,17 +40,16 @@ module lc4_processor
     output wire [15:0] test_dmem_addr,     // Testbench: address to read/write memory
     output wire [15:0] test_dmem_data,     // Testbench: value read/writen from/to memory
    
-    // State of the zedboard switches, LCD and LEDs
-    // You are welcome to use the Zedboard's LCD number display and LEDs
-    // for debugging purposes, but it isn't terribly useful.  Ditto for
-    // reading the switch positions from the Zedboard
-
     input  wire [7:0]  switch_data,        // Current settings of the Zedboard switches
-    output wire [15:0] seven_segment_data, // Data to display to the Zedboard LCD
     output wire [7:0]  led_data            // Which Zedboard LEDs should be turned on?
     );
-   
 
+   // By default, assign LEDs to display switch inputs to avoid warnings about
+   // disconnected ports. Feel free to use this for debugging input/output if
+   // you desire.
+   assign led_data = switch_data;
+
+   
    /* DO NOT MODIFY THIS CODE */
    // Always execute one instruction each cycle (test_stall will get used in your pipelined processor)
    assign test_stall = 2'b0; 

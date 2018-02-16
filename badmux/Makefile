@@ -1,5 +1,5 @@
 # source verilog files
-SOURCES=mux.v
+SYNTH_SOURCES=mux.v
 TOP_SYNTH_MODULE=mux_Nbit_4to1
 
 # testbench files

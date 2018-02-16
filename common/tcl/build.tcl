@@ -13,7 +13,12 @@ proc get_file_contents { filename } {
     return $content
 }
 
-read_verilog [get_file_contents .synthesis-source-files]
+if {[get_file_contents .step] == "synthesis"} { # just doing synthesis
+    read_verilog [get_file_contents .synthesis-source-files]
+} else { # going all the way to implementation
+    read_verilog [get_file_contents .implementation-source-files]
+}
+
 
 # Need to set_part so that IP blocks work correctly
 # https://forums.xilinx.com/t5/Vivado-TCL-Community/project-part-don-t-match-when-run-tcl-command/td-p/440404

@@ -16,7 +16,7 @@ NEEDS_TEST_CASE=true
 
 IMPL_SOURCES=$(SYNTH_SOURCES) system/mmcm.v system/fake_pb_kbd.v system/lc4_system.v system/one_pulse.v system/svga_timing_generation.v system/timer.v system/vga_controller.v system/video_out.v
 TOP_IMPL_MODULE=lc4_system
-CONSTRAINTS=lab3-singlecycle.xdc 
+CONSTRAINTS=system/lab3-singlecycle.xdc 
 BITSTREAM_FILENAME=singlecycle.bit
 
 include ../common/make/vivado.mk

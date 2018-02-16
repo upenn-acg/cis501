@@ -1,5 +1,5 @@
 # source verilog files
-SOURCES=lc4_regfile.v register.v
+SYNTH_SOURCES=lc4_regfile.v register.v
 TOP_SYNTH_MODULE=lc4_regfile
 
 # testbench files

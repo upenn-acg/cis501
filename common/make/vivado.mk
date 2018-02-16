@@ -17,10 +17,10 @@ __check_defined = \
       $(error Undefined $1$(if $2, ($2))))
 
 # variables that should be defined for all labs
-$(call check_defined, SOURCES TOP_SYNTH_MODULE TESTBENCH TOP_TESTBENCH_MODULE, Each lab Makefile should define this)
+$(call check_defined, SYNTH_SOURCES TOP_SYNTH_MODULE TESTBENCH TOP_TESTBENCH_MODULE, Each lab Makefile should define this)
 
 ifdef TOP_IMPL_MODULE
-$(call check_defined, TOP_IMPL_MODULE BITSTREAM_FILENAME CONSTRAINTS, Each implementation lab Makefile should define this)
+$(call check_defined, IMPL_SOURCES TOP_IMPL_MODULE BITSTREAM_FILENAME CONSTRAINTS, Each implementation lab Makefile should define this)
 endif
 
 ifdef ZIP_SOURCES
@@ -44,15 +44,15 @@ help:
 	@echo -e "Valid targets are: synth test debug impl program clean"
 
 # run synthesis to identify code errors/warnings
-synth: setup-files $(SOURCES)
+synth: setup-files $(SYNTH_SOURCES)
 	echo -n "synthesis" > .step
 	$(time) vivado -mode batch -source $(TCL_DIR)/build.tcl
 
 # run all tests
 ifdef NEEDS_TEST_CASE
-test: $(SOURCES) $(TESTBENCH) .set_testcase.v
+test: $(SYNTH_SOURCES) $(TESTBENCH) .set_testcase.v
 else
-test: $(SOURCES) $(TESTBENCH)
+test: $(SYNTH_SOURCES) $(TESTBENCH)
 endif
 	rm -rf xsim.dir/
 	echo -n verilog mylib $^ > .prj
@@ -66,10 +66,11 @@ else
 debug: setup-files
 endif
 	rm -rf .debug-project
+#	echo -n " .set_testcase.v" >> .synthesis-source-files
 	vivado -mode batch -source $(TCL_DIR)/debug.tcl
 
 # run synthesis & implementation to generate a bitstream
-impl: setup-files $(SOURCES)
+impl: setup-files $(IMPL_SOURCES)
 	echo -n "implementation" > .step
 	$(time) vivado -mode batch -source $(TCL_DIR)/build.tcl
 
@@ -78,14 +79,15 @@ program:
 	@echo -n "Specify .bit file to use to program FPGA, then press [ENTER]: "
 	@read bitfile && export BITSTREAM_FILE=$$bitfile && $(time) vivado -mode batch -notrace -source $(TCL_DIR)/program.tcl
 
-zip: $(SOURCES)
+zip: $(ZIP_SOURCES)
 	zip $(ZIP_FILE) $(ZIP_SOURCES)
 
 # place arguments to Tcl debug/synthesis/implementation scripts into hidden files
 setup-files:
-	echo -n $(SOURCES) > .synthesis-source-files
+	echo -n $(SYNTH_SOURCES) > .synthesis-source-files
 	echo -n $(IP_BLOCKS) > .ip-blocks
 	echo -n $(TOP_SYNTH_MODULE) > .top-synth-module
+	echo -n $(IMPL_SOURCES) > .implementation-source-files
 	echo -n $(TOP_IMPL_MODULE) > .top-impl-module
 	echo -n $(TESTBENCH) > .simulation-source-files
 	echo -n $(TOP_TESTBENCH_MODULE) > .top-level-testbench
@@ -114,7 +116,7 @@ endif
 # remove Vivado logs and our hidden file
 clean:
 	rm -f webtalk*.log webtalk*.jou vivado*.log vivado*.jou xsim*.log xsim*.jou xelab*.log xelab*.jou vivado_pid*.str usage_statistics_webtalk.*ml
-	rm -f .synthesis-source-files .simulation-source-files .ip-blocks .top-synth-module .top-impl-module .top-level-testbench .set_testcase.v .constraint-files .bitstream-filename .prj
+	rm -f .synthesis-source-files .simulation-source-files .implementation-source-files .ip-blocks .top-synth-module .top-impl-module .top-level-testbench .set_testcase.v .constraint-files .bitstream-filename .prj
 	rm -rf xsim.dir/ .Xil/ xelab.pb 
 
 # clean, then remove output/ directory: use with caution!

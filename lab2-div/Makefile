@@ -1,5 +1,5 @@
 # source verilog files
-SOURCES=lc4_divider.v
+SYNTH_SOURCES=lc4_divider.v
 TOP_SYNTH_MODULE=lc4_divider
 
 # testbench files

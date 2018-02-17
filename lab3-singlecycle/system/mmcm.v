@@ -1,5 +1,5 @@
 
-// file: clkgen.v
+// file: mmcm.v
 // 
 // (c) Copyright 2008 - 2013 Xilinx, Inc. All rights reserved.
 // 
@@ -131,7 +131,14 @@ wire clk_in2_design_1_clk_wiz_0_0;
     .CLKFBOUT_MULT_F      (10.000),
     .CLKFBOUT_PHASE       (0.000),
     .CLKFBOUT_USE_FINE_PS ("FALSE"),
+
+    
+    // LAB3: change your clock frequency by editing this value. Resulting
+    // frequency is (1GHz / CLKOUT0_DIVIDE_F). Note that ONLY values that are
+    // multiples of 0.125 are valid.
     .CLKOUT0_DIVIDE_F     (64),
+
+    
     .CLKOUT0_PHASE        (0.000),
     .CLKOUT0_DUTY_CYCLE   (0.500),
     .CLKOUT0_USE_FINE_PS  ("FALSE"),

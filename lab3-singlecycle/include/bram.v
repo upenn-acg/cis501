@@ -42,6 +42,7 @@ module bram(input  wire        idclk,
    initial
      begin
         f = 0; // Added to avoid a synthesis warning
+// synthesis translate_off
         $info("%s", `MEMORY_IMAGE_FILE);
         f = $fopen(`MEMORY_IMAGE_FILE, "r");
         if (f == 0)
@@ -50,6 +51,7 @@ module bram(input  wire        idclk,
              $stop;
           end
         $fclose(f);
+// synthesis translate_on
         $readmemh(`MEMORY_IMAGE_FILE, IDRAM, 0, 65535);
      end
 

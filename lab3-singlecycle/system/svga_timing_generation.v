@@ -95,8 +95,12 @@ module svga_timing_generation (input  wire       PIXEL_CLOCK,   // 25 MHz pixel 
    reg        h_blank;        // horizontal blanking
    reg        v_blank;        // vertical blanking
 
+   // jld 16 Feb 2018: removed asynchronous resets for PIXEL_COUNT and
+   // LINE_COUNT registers because Vivado was complaining about them. The VGA
+   // output still seems to work fine.
+   
    // CREATE THE HORIZONTAL LINE PIXEL COUNTER
-   always @ (posedge PIXEL_CLOCK /*jld or posedge RESET*/) begin
+   always @ (posedge PIXEL_CLOCK /*or posedge RESET*/) begin
       if (RESET)
         begin                      // on reset set pixel counter to 0
            PIXEL_COUNT <= 11'h000;
@@ -131,7 +135,7 @@ module svga_timing_generation (input  wire       PIXEL_CLOCK,   // 25 MHz pixel 
    end
 
    // CREATE THE VERTICAL FRAME LINE COUNTER
-   always @ (posedge PIXEL_CLOCK /*jld or posedge RESET*/) begin
+   always @ (posedge PIXEL_CLOCK /*or posedge RESET*/) begin
       if (RESET)
         begin                   // on reset set line counter to 0
            LINE_COUNT <= 10'h000;

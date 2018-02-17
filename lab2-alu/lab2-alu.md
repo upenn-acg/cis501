@@ -25,7 +25,7 @@ not synthesize.**
 + Implement the basic ALU operations, including `+` and `*` using the built-in Verilog operators.
 + Implement DIV and MOD using your `lc4_divider` module.
 + For shift operations, you need to build a barrel shifter.
-+ For comparisons, we recommend extending the input values to 17 bits using zero extension for unsigned comparisons, and sign extension for signed comparisons. Perform the subtraction, then set the output accordingly.
++ For comparisons, we recommend extending the input values to 17 bits using zero extension for unsigned comparisons, and sign extension for signed comparisons. This has the effect of translating both signed *and* unsigned 16-bit numbers into a signed 17-bit representation. Then perform the subtraction, and set the output accordingly.
 
 ## Testing
 

@@ -113,6 +113,9 @@ endif
 endif
 endif
 
+pennsim:
+	java -jar $(COMMON_DIR)/pennsim/PennSim.jar -t -s $(PENNSIM_SCRIPT)
+
 # remove Vivado logs and our hidden file
 clean:
 	rm -f webtalk*.log webtalk*.jou vivado*.log vivado*.jou xsim*.log xsim*.jou xelab*.log xelab*.jou vivado_pid*.str usage_statistics_webtalk.*ml

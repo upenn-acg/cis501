@@ -12,6 +12,10 @@ TESTBENCH=testbench_lc4_processor.v
 TOP_TESTBENCH_MODULE=test_processor
 NEEDS_TEST_CASE=true
 
+# LC4 assembly code
+
+PENNSIM_SCRIPT=lab3-demo.pennsim
+
 # implementation
 
 IMPL_SOURCES=$(SYNTH_SOURCES) system/mmcm.v system/fake_pb_kbd.v system/lc4_system.v system/one_pulse.v system/svga_timing_generation.v system/timer.v system/vga_controller.v system/video_out.v

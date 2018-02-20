@@ -1,0 +1,4 @@
+as lab3-demo lab3-demo
+ld lab3-demo
+dump -readmemh x0000 xFFFF test_data/lab3-demo.hex
+quit

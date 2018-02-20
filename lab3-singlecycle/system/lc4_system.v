@@ -25,11 +25,6 @@ module lc4_system(/* Clock */
                   input wire [7:0]  SWITCH
 		  );
    
-   wire          RST_BTN_IN;     // Right push button
-   wire          GWE_BTN_IN;     // Down push button
-   assign RST_BTN_IN = SWITCH[0];
-   assign GWE_BTN_IN = 1'b0;
-
    // CLOCK MANAGEMENT
    wire          GLOBAL_WE;    // global we, toggled to build a single-step clock
    wire          GLOBAL_RST;   // global reset signal
@@ -50,17 +45,19 @@ module lc4_system(/* Clock */
    
    /* Generate "single-step clock" by one-pulsing the global
     write-enable. The one-pulse circuitry cleans up the signal edges
-    for us. */
+    for us.
+    TODO: single-step clock is broken
+     */
    wire          global_we_pulse;
    one_pulse clk_pulse(.clk( clock_processor ), 
                        .rst( 1'b0 ),
-                       .btn( GWE_BTN_IN ), // FPGA buttons are active-low
+                       .btn( 1'b0 ), // FPGA buttons are active-low
                        .pulse_out( global_we_pulse ));
    
    /* Clean up trailing edges of the GLOBAL_WE switch input */
    wire          global_we_switch;
    
-   Nbit_reg #(1, 0) gwe_cleaner(.in(SWITCH[7]), // FPGA switches are active-low
+   Nbit_reg #(1, 0) gwe_cleaner(.in(SWITCH[0]), // FPGA switches are active-low
                                 .out( global_we_switch ), 
                                 .clk( clock_processor ), 
                                 .we( 1'b1 ), 
@@ -81,15 +78,20 @@ module lc4_system(/* Clock */
    
    
    /* Clean up the edges of the manual reset signal. Only the trailing
-    edge should really matter, though.*/
+    edge should really matter, though. 
+    TODO: fix the manual reset signal
+    */
    wire          rst_btn;
-   Nbit_reg #(1, 0) reset_cleaner(.in( RST_BTN_IN ),
+   Nbit_reg #(1, 0) reset_cleaner(.in( 1'b0 ),
 				  .out( rst_btn ), 
                                   .clk( clock_processor ), 
                                   .we( 1'b1 ), 
                                   .gwe( 1'b1 ), 
                                   .rst( 1'b0 ));
    assign GLOBAL_RST = rst_btn;
+
+   assign LED[0] = GLOBAL_WE;
+   assign LED[7:1] = proc_leds[7:1];
    
    // MEMORY INTERFACE
    // INSTRUCTIONS
@@ -126,6 +128,7 @@ module lc4_system(/* Clock */
    // PROCESSOR
    // NB: we leave the testing outputs disconnected
 
+   wire [7:0]    proc_leds; 
    lc4_processor proc_inst(.clk( clock_processor ),
                            .rst(GLOBAL_RST),
                            .gwe(GLOBAL_WE),
@@ -135,8 +138,8 @@ module lc4_system(/* Clock */
                            .i_cur_dmem_data(dmem_out),
                            .o_dmem_we(dmem_we),
                            .o_dmem_towrite(dmem_in),
-                           .switch_data(SWITCH),
-                           .led_data(LED)
+                           .switch_data( {SWITCH[7:1], 1'b0} ),
+                           .led_data( proc_leds )
                            );
    
    assign imem2_addr = 16'd0;
@@ -177,8 +180,7 @@ module lc4_system(/* Clock */
                               .kbdr( kbdr ),
 			      .proc_clk( clock_processor ),
 			      .reset( GLOBAL_RST ),
-                              // TODO: jld unsure these are in the correct order
-			      .ZED_PB( {BTN_U, BTN_D, BTN_L, BTN_R, BTN_C} ));
+			      .ZED_PB( {BTN_U, BTN_L, BTN_D, BTN_R, BTN_C} ));
    
    
    // Timer device

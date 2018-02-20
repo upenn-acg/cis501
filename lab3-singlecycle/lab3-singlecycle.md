@@ -107,11 +107,13 @@ Once you have timing closure, you can submit results to the **Lab 3: Implementat
 
 For the demo, you will write a simple LC4 assembly program that displays a string to the ZedBoard's VGA display. Most of the code has been written for you, but you need to come up with a string you want to display and call appropriate library functions to send the string to the display. In the file `lab3-demo.asm`, you should write assembly code at `PROGRAM_START` to write your desired string. You will find the code in `DRAW_CHAR` function especially helpful, as it takes an ASCII character, translates it into a pixel bitmap, and sends it to the VGA display at the desired x,y coordinates.
 
-It is highly recommended that you debug your program with the PennSim simulator from CIS 240. `PennSim.jar` is included in the `common/pennsim/` directory. The video display in PennSim works the same way as the VGA display on the ZedBoard.
+It is **highly recommended** that you debug your program with the PennSim simulator from CIS 240. `PennSim.jar` is included in the `common/pennsim/` directory to this end. Conveniently, the video display in PennSim works the same way as the VGA display on the ZedBoard: stores to the memory-mapped display region should have the same effect in both cases.
 
 Once you have a working program, you should load it up as your processor's initial memory state. You can do this by running the following commands:
 ```
 make pennsim
 TEST_CASE=lab3-demo make impl
 ```
-The first command uses PennSim to create a `lab3-demo.hex` file containing the code/data memory contents specified by `lab3-demo.asm`. The second command runs implementation, using `lab3-demo.hex` as the initial state for your processor's memory. Once you program the ZedBoard, your string should display on an attached VGA monitor. Show this to a TA to complete your demo.
+The first command uses PennSim to create a `lab3-demo.hex` file containing the code/data memory contents specified by `lab3-demo.asm`. The second command runs implementation, using `lab3-demo.hex` as the initial state for your processor's memory. 
+
+Once you program the ZedBoard, raise the rightmost switch on the ZedBoard (`SW0`) to set the global write-enable (`gwe`) signal. The right-most LED (`LD0`) shows the value of the `gwe` signal. Your processor should start executing, and your string should display on an attached VGA monitor. Show this to a TA to complete your demo.

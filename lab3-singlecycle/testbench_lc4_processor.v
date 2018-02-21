@@ -325,13 +325,13 @@ module test_processor;
       $display("Simulation finished: %d test cases %d errors [%s]", tests, errors, `INPUT_FILE);
       $display("<scorePossible>%d</scorePossible>", tests);
       $display("<scoreActual>%d</scoreActual>", tests - errors);
+
+      $display("  Instructions:         %d", linenum);
+      $display("  Total Cycles:         %d", num_cycles);
+      $display("  CPI x 1000: %d", (1000 * num_cycles) / linenum);
+      $display("  IPC x 1000: %d", (1000 * linenum) / num_cycles); 
       
       if (linenum != num_cycles) begin
-         $display("  Instructions:         %d", linenum);
-         $display("  Total Cycles:         %d", num_cycles);
-         $display("  CPI x 1000: %d", 1000 * num_cycles / linenum);
-         $display("  IPC x 1000: %d", 1000 * linenum / num_cycles);
-         
          $display("  Execution:          %d", num_exec);
          if (num_cache_stall > 0) begin
   	    $display("  Cache stalls:       %d", num_cache_stall);

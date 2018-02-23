@@ -119,10 +119,8 @@ pennsim:
 
 # make BOOT.BIN image for programming FPGA from an SD card
 boot: output/$(BITSTREAM_FILENAME) $(SDBOOT_DIR)/zynq_fsbl_0.elf
-#	echo -en "//arch = zynq; split = false; format = BIN\nthe_ROM_image:\n{\n[bootloader]" > $(SDBOOT_BIF)
 	echo "the_ROM_image:{[bootloader]"$(SDBOOT_DIR)/zynq_fsbl_0.elf > $(SDBOOT_BIF)
 	echo output/$(BITSTREAM_FILENAME)"}" >> $(SDBOOT_BIF)
-#	echo "}" >> $(SDBOOT_BIF)
 	bootgen -image $(SDBOOT_BIF) -arch zynq -o output/BOOT.BIN
 
 # remove Vivado logs and our hidden file

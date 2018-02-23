@@ -30,8 +30,9 @@ endif
 # shorthand variables for constraint files and Tcl scripts
 # NB: COMMON_DIR is wrt the Makefile in each lab's directory, not wrt this file
 COMMON_DIR=../common
-XDC_DIR=$(COMMON_DIR)/xdc
 TCL_DIR=$(COMMON_DIR)/tcl
+SDBOOT_DIR=$(COMMON_DIR)/sdcard-boot
+SDBOOT_BIF=.boot.bif
 
 time=time -f "Vivado took %E m:s and %M KB"
 
@@ -41,7 +42,7 @@ time=time -f "Vivado took %E m:s and %M KB"
 # if invoked with no explicit target, print out a help message
 .DEFAULT: help
 help:
-	@echo -e "Valid targets are: synth test debug impl program clean"
+	@echo -e "Valid targets are: synth test debug impl zip program boot clean"
 
 # run synthesis to identify code errors/warnings
 synth: setup-files $(SYNTH_SOURCES)
@@ -116,10 +117,18 @@ endif
 pennsim:
 	java -jar $(COMMON_DIR)/pennsim/PennSim.jar -t -s $(PENNSIM_SCRIPT)
 
+# make BOOT.BIN image for programming FPGA from an SD card
+boot: output/$(BITSTREAM_FILENAME) $(SDBOOT_DIR)/zynq_fsbl_0.elf
+#	echo -en "//arch = zynq; split = false; format = BIN\nthe_ROM_image:\n{\n[bootloader]" > $(SDBOOT_BIF)
+	echo "the_ROM_image:{[bootloader]"$(SDBOOT_DIR)/zynq_fsbl_0.elf > $(SDBOOT_BIF)
+	echo output/$(BITSTREAM_FILENAME)"}" >> $(SDBOOT_BIF)
+#	echo "}" >> $(SDBOOT_BIF)
+	bootgen -image $(SDBOOT_BIF) -arch zynq -o output/BOOT.BIN
+
 # remove Vivado logs and our hidden file
 clean:
 	rm -f webtalk*.log webtalk*.jou vivado*.log vivado*.jou xsim*.log xsim*.jou xelab*.log xelab*.jou vivado_pid*.str usage_statistics_webtalk.*ml
-	rm -f .synthesis-source-files .simulation-source-files .implementation-source-files .ip-blocks .top-synth-module .top-impl-module .top-level-testbench .set_testcase.v .constraint-files .bitstream-filename .prj
+	rm -f .synthesis-source-files .simulation-source-files .implementation-source-files .ip-blocks .top-synth-module .top-impl-module .top-level-testbench .set_testcase.v .constraint-files .bitstream-filename .prj $(SDBOOT_BIF)
 	rm -rf xsim.dir/ .Xil/ xelab.pb 
 
 # clean, then remove output/ directory: use with caution!

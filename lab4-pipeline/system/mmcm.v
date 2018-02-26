@@ -56,7 +56,7 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// clk_processor__15.625______0.000______50.0______167.070_____98.575
+// clk_processor__17.467______0.000______50.0______167.070_____98.575
 // clk_vga________25.000______0.000______50.0______175.402_____98.575
 // clk_vga_inv____25.000____180.000______50.0______175.402_____98.575
 //
@@ -133,10 +133,10 @@ wire clk_in2_design_1_clk_wiz_0_0;
     .CLKFBOUT_USE_FINE_PS ("FALSE"),
 
     
-    // LAB3: change your clock frequency by editing this value. Resulting
+    // LAB4: change your clock frequency by editing this value. Resulting
     // frequency is (1GHz / CLKOUT0_DIVIDE_F). Note that ONLY values that are
     // multiples of 0.125 are valid.
-    .CLKOUT0_DIVIDE_F     (64),
+    .CLKOUT0_DIVIDE_F     (57.25),
 
     
     .CLKOUT0_PHASE        (0.000),

@@ -1,3 +1,5 @@
+# Lab 4 Schematic
+
 In this lab, you'll complete a fully bypassed, 5-stage pipelined LC4 processor, as discussed in lecture. All branches will be predicted as not taken. We'll start by drawing a schematic as usual.
 
 Create a detailed schematic of your pipelined datapath, with all wires, ports, and module instantiations labeled. This schematic will be much more complex than your single-cycle schematic, so we are giving you slightly different rules. The goals are to make sure your schematic has the necessary detail and legibility to help you implement the pipeline, and to make it useful preparation for exams.

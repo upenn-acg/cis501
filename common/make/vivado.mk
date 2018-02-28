@@ -57,7 +57,7 @@ endif
 	rm -rf xsim.dir/
 	echo -n verilog mylib $^ > .prj
 	xelab -cc gcc --debug typical --prj .prj --snapshot snapshot.sim --lib mylib mylib.$(TOP_TESTBENCH_MODULE)
-	xsim snapshot.sim --runall --stats --log /dev/stdout -wdb sim.wdb
+	xsim snapshot.sim --runall --stats -wdb sim.wdb
 
 # investigate design via GUI debugger
 ifdef NEEDS_TEST_CASE

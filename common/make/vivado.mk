@@ -27,6 +27,10 @@ ifdef ZIP_SOURCES
 $(call check_defined, ZIP_SOURCES ZIP_FILE, Each lab Makefile where a zip file is submitted should define this)
 endif
 
+ifndef CIS371_AUTOGRADER
+XELAB_FLAGS=-cc gcc
+endif
+
 # shorthand variables for constraint files and Tcl scripts
 # NB: COMMON_DIR is wrt the Makefile in each lab's directory, not wrt this file
 COMMON_DIR=../common
@@ -57,7 +61,7 @@ test: $(SYNTH_SOURCES) $(TESTBENCH)
 endif
 	rm -rf xsim.dir/
 	echo -n verilog mylib $^ > .prj
-	xelab -cc gcc --debug typical --prj .prj --snapshot snapshot.sim --lib mylib mylib.$(TOP_TESTBENCH_MODULE)
+	xelab $(XELAB_FLAGS) --debug typical --prj .prj --snapshot snapshot.sim --lib mylib mylib.$(TOP_TESTBENCH_MODULE)
 	xsim snapshot.sim --runall --stats -wdb sim.wdb
 
 # investigate design via GUI debugger

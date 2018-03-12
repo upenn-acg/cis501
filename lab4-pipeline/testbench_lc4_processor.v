@@ -11,12 +11,9 @@
 module test_processor;
    `include "include/lc4_prettyprint_errors.v"
    
-   integer     input_file, output_file, errors, linenum, tests;
+   integer     input_file, output_file, errors, tests;
+   integer     insns; 
    integer     num_cycles;
-   integer     num_exec, num_cache_stall, num_branch_stall, num_load_stall;
-   integer     num_stalls_in_a_row;
-   
-   integer     next_instruction;
 
    // Set this to non-zero to cause the testbench to halt at the first
    // failure. Often useful when debugging.
@@ -34,9 +31,9 @@ module test_processor;
    wire [15:0] dmem_towrite;
    wire        dmem_we;
 
-   wire [1:0]  test_stall;        // Testbench: is this a stall cycle? (don't compare the test values)
    wire [15:0] test_pc;           // Testbench: program counter
    wire [15:0] test_insn;         // Testbench: instruction bits
+   wire [1:0]  test_stall;        // Testbench: is this a stall cycle?
    wire        test_regfile_we;   // Testbench: register file write enable
    wire [2:0]  test_regfile_reg;  // Testbench: which register to write in the register file 
    wire [15:0] test_regfile_in;   // Testbench: value to write into the register file
@@ -48,6 +45,7 @@ module test_processor;
 
    reg  [15:0] verify_pc;
    reg  [15:0] verify_insn;
+   reg  [1:0]  verify_stall; 
    reg         verify_regfile_we;
    reg  [2:0]  verify_regfile_reg;
    reg  [15:0] verify_regfile_in;
@@ -118,17 +116,11 @@ module test_processor;
       // Initialize Inputs
       clk = 0;
       rst = 1;
-      linenum = 0;
+      insns = 0;
       errors = 0;
       tests = 0; 
       num_cycles = 0;
-      num_exec = 0;
-      num_cache_stall = 0;
-      num_branch_stall = 0;
-      num_load_stall = 0;
       file_status = 10;
-      
-      num_stalls_in_a_row = 0;
       
       // open the test inputs
       input_file = $fopen(`INPUT_FILE, "r");
@@ -138,23 +130,24 @@ module test_processor;
       end
 
       // open the output file
-`ifdef OUTPUT_FILE
-      output_file = $fopen(`OUTPUT_FILE, "w");
-      if (output_file == `NULL) begin
-         $display("Error opening file: %s", `OUTPUT_FILE);
-         $finish;
-      end
-`endif
+// `ifdef OUTPUT_FILE
+//       output_file = $fopen(`OUTPUT_FILE, "w");
+//       if (output_file == `NULL) begin
+//          $display("Error opening file: %s", `OUTPUT_FILE);
+//          $finish;
+//       end
+// `endif
 
 
-      #80
+      #80; 
       // Wait for global reset to finish
       rst = 0;
       #32;
   
-      while (10 == $fscanf(input_file, "%h %b %h %h %h %h %h %h %h %h", 
+      while (11 == $fscanf(input_file, "%h %b %h %h %h %h %h %h %h %h %h", 
                            verify_pc,
                            verify_insn,
+                           verify_stall,
                            verify_regfile_we,
                            verify_regfile_reg,
                            verify_regfile_in,
@@ -163,18 +156,21 @@ module test_processor;
                            verify_dmem_we,
                            verify_dmem_addr,
                            verify_dmem_data)) begin
+         tests = tests + 11;
 
-         linenum = linenum + 1;
-         tests = tests + 10; 
+         if (num_cycles % 10000 == 0) begin
+            $display("Cycle number: %d", num_cycles);
+         end
 
-         if (linenum % 10000 == 0) begin
-            $display("Instruction number: %d", linenum);
+         if (verify_stall == 2'b0) begin
+            insns = insns + 1; 
          end
             
          if (output_file) begin
-            $fdisplay(output_file, "%h %b %h %h %h %h %h %h %h %h",
+            $fdisplay(output_file, "%h %b %h %h %h %h %h %h %h %h %h",
                       verify_pc,
                       verify_insn,
+                      verify_stall,
                       verify_regfile_we,
                       verify_regfile_reg,
                       verify_regfile_in,
@@ -184,152 +180,126 @@ module test_processor;
                       verify_dmem_addr,
                       verify_dmem_data);
          end
-         
-         next_instruction = 0;  // false
-         while (!next_instruction) begin
-            
-            if (test_stall == 2'd0) begin
-               num_exec = num_exec + 1;
-               next_instruction = 1;  // true
-               num_stalls_in_a_row = 0;
-            end else begin
-               num_stalls_in_a_row = num_stalls_in_a_row + 1;               
-            end
-            
-            if (test_stall === 2'd1) begin
-               num_cache_stall = num_cache_stall + 1;
-            end
-            
-            if (test_stall === 2'd2) begin
-               num_branch_stall = num_branch_stall + 1;
-            end
-            
-            if (test_stall === 2'd3) begin
-               num_load_stall = num_load_stall + 1;
-            end
 
-            if (num_stalls_in_a_row > 5) begin
-               $display("Error at line %d: your pipeline has stalled for more than 5 cycles in a row, which should never happen.", linenum);
+         // run the cycle, then verify outputs
+         num_cycles = num_cycles + 1;
+	 #40;
+         
+         // pc
+         if (verify_pc !== test_pc) begin
+            $display( "Error at cycle %d: pc should be %h (but was %h)", 
+                      num_cycles, verify_pc, test_pc);    
+            errors = errors + 1;
+            if (exit_at_first_failure) begin
                $finish;
             end
-            
-            if (next_instruction) begin
-               
-               // Check it before fetching the next instruction
-               
-               // pc
-               if (verify_pc !== test_pc) begin
-                  $display( "Error at line %d: pc should be %h (but was %h)", 
-                            linenum, verify_pc, test_pc);    
-                  errors = errors + 1;
-                  if (exit_at_first_failure) begin
-                     $finish;
-                  end
-               end
-               
-               // insn
-               if (verify_insn !== test_insn) begin
-                  $write("Error at line %d: insn should be %h (", linenum, verify_insn);
-                  pinstr(verify_insn);
-                  $write(") but was %h (", test_insn);
-                  pinstr(test_insn);
-                  $display(")");
-                  errors = errors + 1;
-                  if (exit_at_first_failure) begin
-                     $finish;
-                  end
-               end
-               
-               // regfile_we
-               if (verify_regfile_we !== test_regfile_we) begin
-                  $display( "Error at line %d: regfile_we should be %h (but was %h)", 
-                            linenum, verify_regfile_we, test_regfile_we);    
-                  errors = errors + 1;
-                  if (exit_at_first_failure) begin
-                     $finish;
-                  end 
-               end
-               
-               // regfile_reg
-               if (verify_regfile_we && verify_regfile_reg !== test_regfile_reg) begin
-                  $display( "Error at line %d: regfile_reg should be %h (but was %h)", 
-                            linenum, verify_regfile_reg, test_regfile_reg);    
-                  errors = errors + 1;
-                  if (exit_at_first_failure) begin
-                     $finish;
-                  end
-               end
-               
-               // regfile_in
-               if (verify_regfile_we && verify_regfile_in !== test_regfile_in) begin
-                  $display( "Error at line %d: regfile_in should be %h (but was %h)", 
-                            linenum, verify_regfile_in, test_regfile_in);    
-                  errors = errors + 1;
-                  if (exit_at_first_failure) begin
-                     $finish;
-                  end 
-               end
-               
-               // verify_nzp_we
-               if (verify_nzp_we !== test_nzp_we) begin
-                  $display( "Error at line %d: nzp_we should be %h (but was %h)", 
-                            linenum, verify_nzp_we, test_nzp_we);    
-                  errors = errors + 1;
-                  if (exit_at_first_failure) begin
-                     $finish;
-                  end 
-               end
-               
-               // verify_nzp_new_bits
-               if (verify_nzp_we && verify_nzp_new_bits !== test_nzp_new_bits) begin
-                  $display( "Error at line %d: nzp_new_bits should be %h (but was %h)", 
-                            linenum, verify_nzp_new_bits, test_nzp_new_bits);    
-                  errors = errors + 1;
-                  if (exit_at_first_failure) begin
-                     $finish;
-                  end 
-               end
-               
-               // verify_dmem_we
-               if (verify_dmem_we !== test_dmem_we) begin
-                  $display( "Error at line %d: dmem_we should be %h (but was %h)", 
-                            linenum, verify_dmem_we, test_dmem_we);    
-                  errors = errors + 1;
-                  if (exit_at_first_failure) begin
-                     $finish;
-                  end 
-               end
-               
-               // dmem_addr
-               if (verify_dmem_addr !== test_dmem_addr) begin
-                  $display( "Error at line %d: dmem_addr should be %h (but was %h)", 
-                            linenum, verify_dmem_addr, test_dmem_addr);    
-                  errors = errors + 1;
-                  if (exit_at_first_failure) begin
-                     $finish;
-                  end 
-               end
-               
-               // dmem_data
-               if (verify_dmem_data !== test_dmem_data) begin
-                  $display( "Error at line %d: dmem_data should be %h (but was %h)", 
-                            linenum, verify_dmem_data, test_dmem_data);    
-                  errors = errors + 1;
-                  if (exit_at_first_failure) begin
-                     $finish;
-                  end 
-               end
-            end // if (next_instruction)
-            
-            // Advanced to the next cycle
-            num_cycles = num_cycles + 1;
-            
-	    #40;  // Next cycle
-
-         end // while (!next_instruction)
+         end
          
-      end // while (10 == $fscanf(input_file, "%h %b %h %h %h %h %h %h %h %h",...
-      
+         // insn
+         if (verify_insn !== test_insn) begin
+            $write("Error at cycle %d: insn should be %h (", num_cycles, verify_insn);
+            pinstr(verify_insn);
+            $write(") but was %h (", test_insn);
+            pinstr(test_insn);
+            $display(")");
+            errors = errors + 1;
+            if (exit_at_first_failure) begin
+               $finish;
+            end
+         end
+
+         // stall
+         if (verify_stall !== test_stall) begin
+            $display( "Error at cycle %d: stall should be %h (but was %h)", 
+                      num_cycles, verify_stall, test_stall);    
+            errors = errors + 1;
+            if (exit_at_first_failure) begin
+               $finish;
+            end 
+         end
+         
+         // regfile_we
+         if (verify_regfile_we !== test_regfile_we) begin
+            $display( "Error at cycle %d: regfile_we should be %h (but was %h)", 
+                      num_cycles, verify_regfile_we, test_regfile_we);    
+            errors = errors + 1;
+            if (exit_at_first_failure) begin
+               $finish;
+            end 
+         end
+         
+         // regfile_reg
+         if (verify_regfile_we && verify_regfile_reg !== test_regfile_reg) begin
+            $display( "Error at cycle %d: regfile_reg should be %h (but was %h)", 
+                      num_cycles, verify_regfile_reg, test_regfile_reg);    
+            errors = errors + 1;
+            if (exit_at_first_failure) begin
+               $finish;
+            end
+         end
+         
+         // regfile_in
+         if (verify_regfile_we && verify_regfile_in !== test_regfile_in) begin
+            $display( "Error at cycle %d: regfile_in should be %h (but was %h)", 
+                      num_cycles, verify_regfile_in, test_regfile_in);    
+            errors = errors + 1;
+            if (exit_at_first_failure) begin
+               $finish;
+            end 
+         end
+         
+         // verify_nzp_we
+         if (verify_nzp_we !== test_nzp_we) begin
+            $display( "Error at cycle %d: nzp_we should be %h (but was %h)", 
+                      num_cycles, verify_nzp_we, test_nzp_we);    
+            errors = errors + 1;
+            if (exit_at_first_failure) begin
+               $finish;
+            end 
+         end
+         
+         // verify_nzp_new_bits
+         if (verify_nzp_we && verify_nzp_new_bits !== test_nzp_new_bits) begin
+            $display( "Error at cycle %d: nzp_new_bits should be %h (but was %h)", 
+                      num_cycles, verify_nzp_new_bits, test_nzp_new_bits);    
+            errors = errors + 1;
+            if (exit_at_first_failure) begin
+               $finish;
+            end 
+         end
+         
+         // verify_dmem_we
+         if (verify_dmem_we !== test_dmem_we) begin
+            $display( "Error at cycle %d: dmem_we should be %h (but was %h)", 
+                      num_cycles, verify_dmem_we, test_dmem_we);    
+            errors = errors + 1;
+            if (exit_at_first_failure) begin
+               $finish;
+            end 
+         end
+         
+         // dmem_addr
+         if (verify_dmem_addr !== test_dmem_addr) begin
+            $display( "Error at cycle %d: dmem_addr should be %h (but was %h)", 
+                      num_cycles, verify_dmem_addr, test_dmem_addr);    
+            errors = errors + 1;
+            if (exit_at_first_failure) begin
+               $finish;
+            end 
+         end
+         
+         // dmem_data
+         if (verify_dmem_data !== test_dmem_data) begin
+            $display( "Error at cycle %d: dmem_data should be %h (but was %h)", 
+                      num_cycles, verify_dmem_data, test_dmem_data);    
+            errors = errors + 1;
+            if (exit_at_first_failure) begin
+               $finish;
+            end 
+         end
+         
+      end // while ($fscanf(input_file, ...))
+
          
       if (input_file) $fclose(input_file); 
       if (output_file) $fclose(output_file);
@@ -337,24 +307,11 @@ module test_processor;
       $display("<scorePossible>%d</scorePossible>", tests);
       $display("<scoreActual>%d</scoreActual>", tests - errors);
 
-      $display("  Instructions:         %d", linenum);
+      $display("  Instructions:         %d", insns);
       $display("  Total Cycles:         %d", num_cycles);
-      $display("  CPI x 1000: %d", (1000 * num_cycles) / linenum);
-      $display("  IPC x 1000: %d", (1000 * linenum) / num_cycles); 
-      
-      if (linenum != num_cycles) begin
-         $display("  Execution:          %d", num_exec);
-         if (num_cache_stall > 0) begin
-  	    $display("  Cache stalls:       %d", num_cache_stall);
-         end
-         if (num_branch_stall > 0) begin
-	    $display("  Branch stalls:      %d", num_branch_stall);
-         end
-         if (num_load_stall > 0) begin
-	    $display("  Load stalls:        %d", num_load_stall);
-         end
-      end
-      
+      $display("  CPI x 1000: %d", (1000 * num_cycles) / insns);
+      $display("  IPC x 1000: %d", (1000 * insns) / num_cycles); 
+            
       $finish;
    end // initial begin
    

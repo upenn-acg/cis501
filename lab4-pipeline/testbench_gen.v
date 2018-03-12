@@ -146,10 +146,10 @@ module test_processor;
 `endif
 
 
-      #76; 
+      #80; 
       // Wait for global reset to finish
       rst = 0;
-      //#32;
+      #32;
       
       while (keep_going) begin
       

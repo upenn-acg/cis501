@@ -8,8 +8,8 @@ ZIP_FILE=pipeline.zip
 
 # testbench
 
-#TESTBENCH=testbench_lc4_processor.v
-TESTBENCH=testbench_gen.v
+TESTBENCH=testbench_lc4_processor.v
+#TESTBENCH=testbench_gen.v
 TOP_TESTBENCH_MODULE=test_processor
 NEEDS_TEST_CASE=true
 

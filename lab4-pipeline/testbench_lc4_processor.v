@@ -15,11 +15,6 @@ module test_processor;
    integer     insns; 
    integer     num_cycles;
 
-   // TODO: deprecated
-   integer     num_exec, num_cache_stall, num_branch_stall, num_load_stall;
-   integer     num_stalls_in_a_row;
-   integer     next_instruction;
-
    // Set this to non-zero to cause the testbench to halt at the first
    // failure. Often useful when debugging.
    integer     exit_at_first_failure = 0;
@@ -125,13 +120,7 @@ module test_processor;
       errors = 0;
       tests = 0; 
       num_cycles = 0;
-      num_exec = 0;
-      num_cache_stall = 0;
-      num_branch_stall = 0;
-      num_load_stall = 0;
       file_status = 10;
-      
-      num_stalls_in_a_row = 0;
       
       // open the test inputs
       input_file = $fopen(`INPUT_FILE, "r");
@@ -141,19 +130,19 @@ module test_processor;
       end
 
       // open the output file
-`ifdef OUTPUT_FILE
-      output_file = $fopen(`OUTPUT_FILE, "w");
-      if (output_file == `NULL) begin
-         $display("Error opening file: %s", `OUTPUT_FILE);
-         $finish;
-      end
-`endif
+// `ifdef OUTPUT_FILE
+//       output_file = $fopen(`OUTPUT_FILE, "w");
+//       if (output_file == `NULL) begin
+//          $display("Error opening file: %s", `OUTPUT_FILE);
+//          $finish;
+//       end
+// `endif
 
 
-      #76; 
+      #80; 
       // Wait for global reset to finish
       rst = 0;
-      //#40;
+      #32;
   
       while (11 == $fscanf(input_file, "%h %b %h %h %h %h %h %h %h %h %h", 
                            verify_pc,
@@ -322,20 +311,7 @@ module test_processor;
       $display("  Total Cycles:         %d", num_cycles);
       $display("  CPI x 1000: %d", (1000 * num_cycles) / insns);
       $display("  IPC x 1000: %d", (1000 * insns) / num_cycles); 
-      
-      if (insns != num_cycles) begin
-         //$display("  Execution:          %d", num_exec);
-         if (num_cache_stall > 0) begin
-  	    $display("  Cache stalls:       %d", num_cache_stall);
-         end
-         if (num_branch_stall > 0) begin
-	    $display("  Branch stalls:      %d", num_branch_stall);
-         end
-         if (num_load_stall > 0) begin
-	    $display("  Load stalls:        %d", num_load_stall);
-         end
-      end
-      
+            
       $finish;
    end // initial begin
    

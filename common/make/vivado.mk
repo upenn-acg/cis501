@@ -37,7 +37,7 @@ SDBOOT_BIF=.boot.bif
 time=time -f "Vivado took %E m:s and %M KB"
 
 # NB: the .set_testcase.v target does create a file .set_testcase.v, but we want it to run every time so we declare it phony
-.PHONY: .set_testcase.v clean extraclean
+.PHONY: .set_testcase.v debug program pennsim boot clean extraclean
 
 # if invoked with no explicit target, print out a help message
 .DEFAULT: help
@@ -107,14 +107,16 @@ else
 ifeq (TEST_CASE,)
 	$(error ERROR: you need to define TEST_CASE. Re-run with "TEST_CASE=... make $(MAKECMDGOALS)")
 else
-	echo \`define INPUT_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).trace\" > $@
-	echo \`define OUTPUT_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).output\" >> $@
+	echo \`define INPUT_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).ctrace\" > $@
+	echo \`define OUTPUT_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).ctrace\" >> $@
+	echo \`define ORIG_INPUT_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).trace\" >> $@
 	echo \`define MEMORY_IMAGE_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).hex\" >> $@
 endif
 endif
 endif
 
 pennsim:
+	rm -f test_data/lab[345]-demo.hex
 	java -jar $(COMMON_DIR)/pennsim/PennSim.jar -t -s $(PENNSIM_SCRIPT)
 
 # make BOOT.BIN image for programming FPGA from an SD card

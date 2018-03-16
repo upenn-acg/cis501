@@ -40,7 +40,7 @@ All other ports on the processor module are identical to your single-cycle imple
 
 Writing sub-modules: It is tempting to make one module for each pipeline stage and/or for each pipeline register. We recommend against this. A single, giant module is easier to debug because you can view all the signals in one big list in the debugger. Combinational loops are also somewhat liklier this way, which will cause the simulator to hang (`make synth` will catch such loops, however).
 
-Port/Wire Shadowing: Make sure you do not declare any wires with the same name as a port (equivalent to variable shadowing). By default, the synthesizer will issue a warning about this and ignore the second declaration. On good rule of thumb is to avoid any wire declarations that start with `o_`, `i_`, or `test_`. Reserve these prefixes for the ports.
+Port/Wire Shadowing: Make sure you do not declare any wires with the same name as a port (equivalent to variable shadowing). By default, the synthesizer will issue a warning about this and ignore the second declaration. One good rule of thumb is to avoid any wire declarations that start with `o_`, `i_`, or `test_`. Reserve these prefixes for the ports.
 
 ## Debugging
 

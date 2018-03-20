@@ -156,7 +156,6 @@ module test_processor;
                            verify_dmem_we,
                            verify_dmem_addr,
                            verify_dmem_data)) begin
-         tests = tests + 11;
 
          if (num_cycles % 10000 == 0) begin
             $display("Cycle number: %d", num_cycles);
@@ -184,30 +183,9 @@ module test_processor;
          // run the cycle, then verify outputs
          num_cycles = num_cycles + 1;
 	 #40;
-         
-         // pc
-         if (verify_pc !== test_pc) begin
-            $display( "Error at cycle %d: pc should be %h (but was %h)", 
-                      num_cycles, verify_pc, test_pc);    
-            errors = errors + 1;
-            if (exit_at_first_failure) begin
-               $finish;
-            end
-         end
-         
-         // insn
-         if (verify_insn !== test_insn) begin
-            $write("Error at cycle %d: insn should be %h (", num_cycles, verify_insn);
-            pinstr(verify_insn);
-            $write(") but was %h (", test_insn);
-            pinstr(test_insn);
-            $display(")");
-            errors = errors + 1;
-            if (exit_at_first_failure) begin
-               $finish;
-            end
-         end
 
+         tests = tests + 1;
+         
          // stall
          if (verify_stall !== test_stall) begin
             $display( "Error at cycle %d: stall should be %h (but was %h)", 
@@ -216,87 +194,115 @@ module test_processor;
             if (exit_at_first_failure) begin
                $finish;
             end 
-         end
-         
-         // regfile_we
-         if (verify_regfile_we !== test_regfile_we) begin
-            $display( "Error at cycle %d: regfile_we should be %h (but was %h)", 
-                      num_cycles, verify_regfile_we, test_regfile_we);    
-            errors = errors + 1;
-            if (exit_at_first_failure) begin
-               $finish;
-            end 
-         end
-         
-         // regfile_reg
-         if (verify_regfile_we && verify_regfile_reg !== test_regfile_reg) begin
-            $display( "Error at cycle %d: regfile_reg should be %h (but was %h)", 
-                      num_cycles, verify_regfile_reg, test_regfile_reg);    
-            errors = errors + 1;
-            if (exit_at_first_failure) begin
-               $finish;
+         end 
+
+         if (verify_stall === 2'b00) begin // if it's a non-stall cycle, verify other test_* signals
+
+            tests = tests + 10; 
+            
+            // pc
+            if (verify_pc !== test_pc) begin
+               $display( "Error at cycle %d: pc should be %h (but was %h)", 
+                         num_cycles, verify_pc, test_pc);    
+               errors = errors + 1;
+               if (exit_at_first_failure) begin
+                  $finish;
+               end
             end
-         end
-         
-         // regfile_in
-         if (verify_regfile_we && verify_regfile_in !== test_regfile_in) begin
-            $display( "Error at cycle %d: regfile_in should be %h (but was %h)", 
-                      num_cycles, verify_regfile_in, test_regfile_in);    
-            errors = errors + 1;
-            if (exit_at_first_failure) begin
-               $finish;
-            end 
-         end
-         
-         // verify_nzp_we
-         if (verify_nzp_we !== test_nzp_we) begin
-            $display( "Error at cycle %d: nzp_we should be %h (but was %h)", 
-                      num_cycles, verify_nzp_we, test_nzp_we);    
-            errors = errors + 1;
-            if (exit_at_first_failure) begin
-               $finish;
-            end 
-         end
-         
-         // verify_nzp_new_bits
-         if (verify_nzp_we && verify_nzp_new_bits !== test_nzp_new_bits) begin
-            $display( "Error at cycle %d: nzp_new_bits should be %h (but was %h)", 
-                      num_cycles, verify_nzp_new_bits, test_nzp_new_bits);    
-            errors = errors + 1;
-            if (exit_at_first_failure) begin
-               $finish;
-            end 
-         end
-         
-         // verify_dmem_we
-         if (verify_dmem_we !== test_dmem_we) begin
-            $display( "Error at cycle %d: dmem_we should be %h (but was %h)", 
-                      num_cycles, verify_dmem_we, test_dmem_we);    
-            errors = errors + 1;
-            if (exit_at_first_failure) begin
-               $finish;
-            end 
-         end
-         
-         // dmem_addr
-         if (verify_dmem_addr !== test_dmem_addr) begin
-            $display( "Error at cycle %d: dmem_addr should be %h (but was %h)", 
-                      num_cycles, verify_dmem_addr, test_dmem_addr);    
-            errors = errors + 1;
-            if (exit_at_first_failure) begin
-               $finish;
-            end 
-         end
-         
-         // dmem_data
-         if (verify_dmem_data !== test_dmem_data) begin
-            $display( "Error at cycle %d: dmem_data should be %h (but was %h)", 
-                      num_cycles, verify_dmem_data, test_dmem_data);    
-            errors = errors + 1;
-            if (exit_at_first_failure) begin
-               $finish;
-            end 
-         end
+            
+            // insn
+            if (verify_insn !== test_insn) begin
+               $write("Error at cycle %d: insn should be %h (", num_cycles, verify_insn);
+               pinstr(verify_insn);
+               $write(") but was %h (", test_insn);
+               pinstr(test_insn);
+               $display(")");
+               errors = errors + 1;
+               if (exit_at_first_failure) begin
+                  $finish;
+               end
+            end
+
+            // regfile_we
+            if (verify_regfile_we !== test_regfile_we) begin
+               $display( "Error at cycle %d: regfile_we should be %h (but was %h)", 
+                         num_cycles, verify_regfile_we, test_regfile_we);    
+               errors = errors + 1;
+               if (exit_at_first_failure) begin
+                  $finish;
+               end 
+            end
+            
+            // regfile_reg
+            if (verify_regfile_we && verify_regfile_reg !== test_regfile_reg) begin
+               $display( "Error at cycle %d: regfile_reg should be %h (but was %h)", 
+                         num_cycles, verify_regfile_reg, test_regfile_reg);    
+               errors = errors + 1;
+               if (exit_at_first_failure) begin
+                  $finish;
+               end
+            end
+            
+            // regfile_in
+            if (verify_regfile_we && verify_regfile_in !== test_regfile_in) begin
+               $display( "Error at cycle %d: regfile_in should be %h (but was %h)", 
+                         num_cycles, verify_regfile_in, test_regfile_in);    
+               errors = errors + 1;
+               if (exit_at_first_failure) begin
+                  $finish;
+               end 
+            end
+            
+            // verify_nzp_we
+            if (verify_nzp_we !== test_nzp_we) begin
+               $display( "Error at cycle %d: nzp_we should be %h (but was %h)", 
+                         num_cycles, verify_nzp_we, test_nzp_we);    
+               errors = errors + 1;
+               if (exit_at_first_failure) begin
+                  $finish;
+               end 
+            end
+            
+            // verify_nzp_new_bits
+            if (verify_nzp_we && verify_nzp_new_bits !== test_nzp_new_bits) begin
+               $display( "Error at cycle %d: nzp_new_bits should be %h (but was %h)", 
+                         num_cycles, verify_nzp_new_bits, test_nzp_new_bits);    
+               errors = errors + 1;
+               if (exit_at_first_failure) begin
+                  $finish;
+               end 
+            end
+            
+            // verify_dmem_we
+            if (verify_dmem_we !== test_dmem_we) begin
+               $display( "Error at cycle %d: dmem_we should be %h (but was %h)", 
+                         num_cycles, verify_dmem_we, test_dmem_we);    
+               errors = errors + 1;
+               if (exit_at_first_failure) begin
+                  $finish;
+               end 
+            end
+            
+            // dmem_addr
+            if (verify_dmem_addr !== test_dmem_addr) begin
+               $display( "Error at cycle %d: dmem_addr should be %h (but was %h)", 
+                         num_cycles, verify_dmem_addr, test_dmem_addr);    
+               errors = errors + 1;
+               if (exit_at_first_failure) begin
+                  $finish;
+               end 
+            end
+            
+            // dmem_data
+            if (verify_dmem_data !== test_dmem_data) begin
+               $display( "Error at cycle %d: dmem_data should be %h (but was %h)", 
+                         num_cycles, verify_dmem_data, test_dmem_data);    
+               errors = errors + 1;
+               if (exit_at_first_failure) begin
+                  $finish;
+               end 
+            end
+         end // non-stall cycle
          
       end // while ($fscanf(input_file, ...))
 

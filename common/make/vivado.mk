@@ -112,7 +112,7 @@ ifeq (TEST_CASE,)
 	$(error ERROR: you need to define TEST_CASE. Re-run with "TEST_CASE=... make $(MAKECMDGOALS)")
 else
 	echo \`define INPUT_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).ctrace\" > $@
-	echo \`define OUTPUT_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).ctrace\" >> $@
+	echo \`define OUTPUT_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).output\" >> $@
 	echo \`define ORIG_INPUT_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).trace\" >> $@
 	echo \`define MEMORY_IMAGE_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).hex\" >> $@
 endif

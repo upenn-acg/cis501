@@ -32,13 +32,14 @@ Whereas the test wires should be set in the Writeback stage, `o_cur_pc` is the p
 + 1: reserved for the superscalar design; for this lab, never set test_stall to 1
 + 2: flushed due to misprediction or because the first real instruction hasn't made it through to the writeback stage yet
 + 3: stalled due to load-to-use penalty
+
 All other ports on the processor module are identical to your single-cycle implementation.
 
 `switch_data` and `led_data`: You may safely ignore these ports. They provide your processor with the states of the Zedboard's switches and allow you to control its LEDs. If you want to use these for your own testing, or just for fun, use the example debugging code from the `lc4_single.v` skeleton as a starting point. (Use of the display and LEDs is strictly optional. There are no points or extra credit associated with it.)
 
 ### General Advice
 
-Writing sub-modules: It is tempting to make one module for each pipeline stage and/or for each pipeline register. We recommend against this. A single, giant module is easier to debug because you can view all the signals in one big list in the debugger. Combinational loops are also somewhat liklier this way, which will cause the simulator to hang (`make synth` will catch such loops, however).
+Writing sub-modules: It is tempting to make one module for each pipeline stage and/or for each pipeline register. We recommend against this. A single, giant module is easier to debug because you can view all the signals in one big list in the debugger. Combinational loops are also somewhat likelier this way, which will cause the simulator to hang (`make synth` will catch such loops, however).
 
 Port/Wire Shadowing: Make sure you do not declare any wires with the same name as a port (equivalent to variable shadowing). By default, the synthesizer will issue a warning about this and ignore the second declaration. One good rule of thumb is to avoid any wire declarations that start with `o_`, `i_`, or `test_`. Reserve these prefixes for the ports.
 
@@ -51,8 +52,8 @@ Debugging this assignment will be *much*, **much** harder than debugging the sin
 + You can set a breakpoint on a `$display` call in your `always` block to get Vivado to break at the end of each cycle. This is much more effective than setting breakpoints elsewhere in your code. An empty `$display();` statement at the very end of the block is especially useful for setting a breakpoint. You can also single-step forward 40ns to move forward one cycle.
 + Start with the `test_alu` test case, and do not move on until it is completely working. Move through the test cases one by one.
 + The testbench can be configured (set `exit_at_first_failure = 1`) to stop as soon as it encounters an error and print out both the line number (n) and instruction.
-++ Consider creating a pipeline diagram (as we've used in lecture) of the corresponding ASM file for the first `n` instructions. Mark all bypasses, stalls, squashes, and register contents on your diagram. (Spreadsheets are good for this--use one row for each instruction, one column for each cycle, and fill in the pipeline stages like the examples on the lecture slide.)
-++ Next, step through your code by setting a breakpoint in the `always` block, and compare your signals to the expected values in every pipeline stage. This is very helpful to identify undeclared wires (which default to 1 bit wide), incorrect bypass logic, etc.
+    + Consider creating a pipeline diagram (as we've used in lecture) of the corresponding ASM file for the first `n` instructions. Mark all bypasses, stalls, squashes, and register contents on your diagram. (Spreadsheets are good for this--use one row for each instruction, one column for each cycle, and fill in the pipeline stages like the examples on the lecture slide.)
+    + Next, step through your code by setting a breakpoint in the `always` block, and compare your signals to the expected values in every pipeline stage. This is very helpful to identify undeclared wires (which default to 1 bit wide), incorrect bypass logic, etc.
 + You can print out an instruction's disassembly inside the `@always` block via the `pinstr()` subroutine. See the file `include/lc4_prettyprint_errors.v` for more details.
 
 ## Demo

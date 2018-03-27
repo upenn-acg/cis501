@@ -14,6 +14,7 @@ module test_processor;
    integer     input_file, output_file, errors, tests;
    integer     insns; 
    integer     num_cycles;
+   integer     consecutive_stalls;
 
    // Set this to non-zero to cause the testbench to halt at the first
    // failure. Often useful when debugging.
@@ -121,6 +122,7 @@ module test_processor;
       tests = 0; 
       num_cycles = 0;
       file_status = 10;
+      consecutive_stalls = 0;
       
       // open the test inputs
       input_file = $fopen(`INPUT_FILE, "r");
@@ -195,6 +197,18 @@ module test_processor;
                $finish;
             end 
          end 
+
+         // count consecutive stalls
+         if (test_stall !== 2'b000) begin
+            if (consecutive_stalls >= 5) begin
+                $display("Error at cycle %d: your pipeline has stalled for more than 5 cycles in a row, which should never happen. This might indicate your pipeline will be stuck stalling forever, so the testbench will now exit.", num_cycles);
+                $finish;
+            end
+            consecutive_stalls = consecutive_stalls + 1;
+        end else begin
+            consecutive_stalls = 0;
+        end
+
 
          if (verify_stall === 2'b00) begin // if it's a non-stall cycle, verify other test_* signals
 

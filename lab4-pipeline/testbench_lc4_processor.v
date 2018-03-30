@@ -58,7 +58,7 @@ module test_processor;
    reg [15:0]  file_status;
    
    wire [15:0] vout_dummy;  // video out
-
+   
    always #5 clk <= ~clk;
    
    // Produce gwe and other we signals using same modules as lc4_system
@@ -112,7 +112,15 @@ module test_processor;
                             .test_dmem_data(test_dmem_data),
                             .switch_data(8'd0)
                             );
-   	
+
+   task printPoints;
+      input [31:0] possible, actual;
+      begin
+         $display("<scorePossible>%d</scorePossible>", possible);
+         $display("<scoreActual>%d</scoreActual>", actual);
+      end
+   endtask
+   
    initial begin
       // Initialize Inputs
       clk = 0;
@@ -201,8 +209,9 @@ module test_processor;
          // count consecutive stalls
          if (test_stall !== 2'b000) begin
             if (consecutive_stalls >= 5) begin
-                $display("Error at cycle %d: your pipeline has stalled for more than 5 cycles in a row, which should never happen. This might indicate your pipeline will be stuck stalling forever, so the testbench will now exit.", num_cycles);
-                $finish;
+               $display("Error at cycle %d: your pipeline has stalled for more than 5 cycles in a row, which should never happen. This might indicate your pipeline will be stuck stalling forever, so the testbench will now exit.", num_cycles);
+               printPoints(1, 0); 
+               $finish;
             end
             consecutive_stalls = consecutive_stalls + 1;
         end else begin
@@ -323,10 +332,13 @@ module test_processor;
          
       if (input_file) $fclose(input_file); 
       if (output_file) $fclose(output_file);
+      
       $display("Simulation finished: %d test cases %d errors [%s]", tests, errors, `INPUT_FILE);
-      $display("<scorePossible>%d</scorePossible>", tests);
-      $display("<scoreActual>%d</scoreActual>", tests - errors);
-
+      printPoints(tests, tests-errors); 
+      //$display("<scorePossible>%d</scorePossible>", tests);
+      //$display("<scoreActual>%d</scoreActual>", tests - errors);
+      
+      
       $display("  Instructions:         %d", insns);
       $display("  Total Cycles:         %d", num_cycles);
       $display("  CPI x 1000: %d", (1000 * num_cycles) / insns);

@@ -34,9 +34,9 @@ Your datapath must contain the following elements:
 
 ## Design Tips
 
-We strongly *discourage* using separate modules for your pipeline stages, let alone for each of the two pipelines. The bypasses are asymmetric, making it tricky to write a single module for any given stage that you can just instantiate once for each pipe.
+We strongly *discourage* using separate modules for your pipeline stages, let alone for each of the two pipelines. The bypasses are asymmetric, making it very tricky to write, say, a single module for Fetch that you can instantiate twice for the two pipelines.
 
-Be on the lookout in `vivado.log` and `post_synthesis_drc_report.txt` for **combinational loops**. They can cause simulation to hang.
+Be on the lookout in `vivado.log` and `post_synth_drc_report.txt` for **combinational loops**. They can cause simulation to hang.
 
 In the objects pane in the Vivado debugger (accessible via `make debug`), you can use `Ctrl-A` to select all, then open the pop-up menu and set the radix to hexadecimal for everything at once. Most wires are much easier to trace when you view them in hexadecimal rather than binary.
 

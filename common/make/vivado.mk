@@ -61,7 +61,7 @@ test: $(SYNTH_SOURCES) $(TESTBENCH)
 endif
 	rm -rf xsim.dir/
 	echo -n verilog mylib $^ > .prj
-	xelab $(XELAB_FLAGS) --debug typical --prj .prj --snapshot snapshot.sim --lib mylib mylib.$(TOP_TESTBENCH_MODULE)
+	xelab $(XELAB_FLAGS) --debug off --prj .prj --snapshot snapshot.sim --lib mylib mylib.$(TOP_TESTBENCH_MODULE)
 	xsim snapshot.sim --runall --stats -wdb sim.wdb
 
 # investigate design via GUI debugger
@@ -115,6 +115,7 @@ else
 	echo \`define OUTPUT_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).output\" >> $@
 	echo \`define ORIG_INPUT_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).trace\" >> $@
 	echo \`define MEMORY_IMAGE_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).hex\" >> $@
+	echo \`define TEST_CASE \"$(TEST_CASE)\" >> $@
 endif
 endif
 endif

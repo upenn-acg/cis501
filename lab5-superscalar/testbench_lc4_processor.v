@@ -254,23 +254,9 @@ module test_processor;
          
          // stall
          assertEqual(.expected(verify_stall_A), .actual(test_stall_A), .label("test_stall_A"));
-         // if A does not stall, check test_stall_B as usual
-         // else, only count error if test_stall_B is not 0 or is undefined
-         // (i.e. has X or Z values)
-         if (verify_stall_A === 2'b00) begin
-            assertEqual(.expected(verify_stall_B), .actual(test_stall_B), .label("test_stall_B"));
-         // accounts for X and Z values
-         end else if ((test_stall_B !== 2'b01) & (test_stall_B !== 2'b10) & (test_stall_B !== 2'b11)) begin
-            // force error; if A stalls, B should stall
-            // even if it's not with the value in the ctrace file
-            // copied from assertEqual so we can have custom error message
-            $display("Error at cycle %d: test_stall_B should have non-zero value due to stall in A (but was %h)",
-                     num_cycles, test_stall_B);
-            errors = errors + 1;
-            if (exit_at_first_failure) begin
-               $finish;
-            end
-         end
+         // if A stalls with load-to-use, check if B superscalar-stalls
+         // else, check according to ctrace file
+         assertEqual(.expected((verify_stall_A === 2'b11) ? 2'b01 : verify_stall_B), .actual(test_stall_B), .label("test_stall_B"));
 
          // count consecutive stalls
          if (test_stall_A !== 2'd0 && test_stall_B !== 2'd0) begin

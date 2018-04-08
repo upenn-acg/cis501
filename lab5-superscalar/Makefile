@@ -8,10 +8,16 @@ ZIP_FILE=superscalar.zip
 
 # testbench
 
+NEEDS_TEST_CASE=true
+
 TESTBENCH=testbench_lc4_processor.v
 #TESTBENCH=testbench_gen.v
 TOP_TESTBENCH_MODULE=test_processor
-NEEDS_TEST_CASE=true
+
+# legacy testbench from Spring 2017
+#TESTBENCH=grade_lc4_superscalar.v
+#TOP_TESTBENCH_MODULE=grade_lc4_superscalar_v
+
 
 # LC4 assembly code
 

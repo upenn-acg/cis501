@@ -5,3 +5,5 @@ as FlappyBird libc FlappyBird
 ld os
 ld FlappyBird
 break set TRAP_HALT
+break set LC4_BLT_VMEM_LOOP
+dump -readmemh x0000 xFFFF flappy.hex

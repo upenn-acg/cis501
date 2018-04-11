@@ -168,15 +168,51 @@ lc4_halt
 	.FALIGN
 lc4_reset_vmem
 	;; prologue
-	ADD R6, R6, #-2
+	ADD R6, R6, #-7
 	STR R5, R6, #0
 	STR R7, R6, #1
-	;; no arguments
-	TRAP x26
+        STR R0, R6, #2
+        STR R1, R6, #3
+        STR R2, R6, #4
+        STR R3, R6, #5
+        STR R4, R6, #6
+
+        ;; LEA R7, RESET_VMEM_COUNTER
+        ;; CONST R0, #4           ; iterations to perform
+        ;; STR R0, R7, #0
+
+reset_vmem_loop
+        ;; set arguments
+        CONST R0, #0            ; x
+        CONST R1, #0            ; y
+        CONST R2, #128          ; width
+        CONST R3, #124          ; height
+        CONST R4, #0            ; color
+
+	LEA R7, STACK_SAVER
+	STR R6, R7, #0
+        
+	TRAP x0A                ; call lc4_draw_rect
+
+	LEA R7, STACK_SAVER
+	LDR R6, R7, #0
+
+        ;; LEA R7, RESET_VMEM_COUNTER
+        ;; LDR R0, R7, #0
+        ;; ADD R0, R0, #-1
+        ;; STR R0, R7, #0
+        ;; ADD R0, R0, #0
+        ;; BRp reset_vmem_loop
+        
 	;; epilogue
 	LDR R5, R6, #0
 	LDR R7, R6, #1
-	ADD R6, R6, #2
+        LDR R0, R6, #2
+        LDR R1, R6, #3
+        LDR R2, R6, #4
+        LDR R3, R6, #5
+        LDR R4, R6, #6
+	ADD R6, R6, #7
 	RET
 
 	.FALIGN
@@ -185,8 +221,17 @@ lc4_blt_vmem
 	ADD R6, R6, #-2
 	STR R5, R6, #0
 	STR R7, R6, #1
-	;; no arguments
-	TRAP x27
+
+        ;; NOP loop to slow the game down to be playable on hardware
+        CONST R5, #255
+        ;; HICONST R5, x7F         ; run for 2K iterations
+LC4_BLT_VMEM_LOOP
+        ADD R5, R5, #-1
+        BRzp LC4_BLT_VMEM_LOOP
+
+        ;; no arguments
+;;; TRAP x27
+        
 	;; epilogue
 	LDR R5, R6, #0
 	LDR R7, R6, #1
@@ -242,5 +287,7 @@ lc4_lfsr
 ;;;  needed for traps that overwrite R6
 STACK_SAVER .FILL 0x0000
 
+RESET_VMEM_COUNTER .FILL 0x0000
+        
 ;;;  LFSR value used by lfsr code
 LFSR .FILL 0x0001

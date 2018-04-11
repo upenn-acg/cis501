@@ -523,17 +523,17 @@ HANDLE_KEYBOARD_EVENT
 TRAP_PUTS
 ;;;  This version of the code does not respect the stack
 
-	LDR R1, R0, #0		; Load the next character into R1
-	BRz END_TRAP_PUTS	; Check for the zero terminating character
+;; 	LDR R1, R0, #0		; Load the next character into R1
+;; 	BRz END_TRAP_PUTS	; Check for the zero terminating character
 
-	LC R2, OS_ADSR_ADDR
-CHECK_ADSR
-	LDR R3, R2, #0
-	BRzp CHECK_ADSR		; Loop while ADSR[15] == 0 ie output not ready
-	LC R2, OS_ADDR_ADDR
-	STR R1, R2, #0		; Write out the character
-	ADD R0, R0, #1		; Increment the pointer R0
-	BRnzp TRAP_PUTS		; Go back to the top 
+;; 	LC R2, OS_ADSR_ADDR
+;; CHECK_ADSR
+;; 	LDR R3, R2, #0
+;; 	BRzp CHECK_ADSR		; Loop while ADSR[15] == 0 ie output not ready
+;; 	LC R2, OS_ADDR_ADDR
+;; 	STR R1, R2, #0		; Write out the character
+;; 	ADD R0, R0, #1		; Increment the pointer R0
+;; 	BRnzp TRAP_PUTS		; Go back to the top 
 	
 END_TRAP_PUTS
 	RTI

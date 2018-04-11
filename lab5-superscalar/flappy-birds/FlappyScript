@@ -1,0 +1,7 @@
+clear
+reset
+as os os
+as FlappyBird libc FlappyBird
+ld os
+ld FlappyBird
+break set TRAP_HALT

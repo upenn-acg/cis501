@@ -1,4 +1,4 @@
-This is the repository for the labs in CIS 371 Spring 2018.
+This is the repository for the labs in CIS 501 Spring 2019.
 
 ## Description of files in common/ directory
 

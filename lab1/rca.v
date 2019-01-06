@@ -13,13 +13,6 @@ module halfadder(input wire  a,
                  output wire cout);
    assign s = a ^ b;
    assign cout = a & b;
-
-   initial begin
-      $display("<scorePossible> 366</scorePossible>");
-      $display("<scoreActual> 366</scoreActual>");
-      $finish;
-   end
-   
 endmodule
 
 /* A full adder adds three 1-bit numbers (a, b, carry-in) and produces a 2-bit

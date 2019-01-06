@@ -5,6 +5,9 @@
 `timescale 1ns / 1ps
 
 module test_adders; 
+
+`include "print_points.v"
+   
    // status variables
    integer     errors, tests, i;
    
@@ -142,10 +145,8 @@ module test_adders;
          end 
       end
       
-      
       $display("Simulation finished: %d test cases %d errors", tests, errors);
-      $display("<scorePossible>%d</scorePossible>", tests);
-      $display("<scoreActual>%d</scoreActual>", tests - errors);
+      printPoints(tests, tests - errors);
       $finish;
    end
 

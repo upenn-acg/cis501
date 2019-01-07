@@ -15,7 +15,8 @@ module test_alu;
    // messy code to pretty-print error messages
    // so they are easier to understand
    `include "lc4_prettyprint_errors.v"
-
+   `include "print_points.v"
+   
    // debugging state variables
    integer  input_file, output_file, errors, tests;
    reg [15:0] expected_result;
@@ -98,9 +99,7 @@ module test_alu;
       if (input_file)  $fclose(input_file); 
       if (output_file) $fclose(output_file);
       $display("Simulation finished: %d test cases %d errors [%s]", tests, errors, `INPUT);
-      $display("<scorePossible>%d</scorePossible>", tests);
-      $display("<scoreActual>%d</scoreActual>", tests - errors);
-
+      printPoints(tests, tests - errors);
       $finish;
    end
    

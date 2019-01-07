@@ -15,6 +15,8 @@
 
 module test_regfile;
 
+`include "print_points.v"
+   
    integer     input_file, output_file, errors, tests;
 
 
@@ -121,8 +123,7 @@ module test_regfile;
       if (input_file) $fclose(input_file); 
       if (output_file) $fclose(output_file);
       $display("Simulation finished: %d test cases %d errors [%s]", tests, errors, `REGISTER_INPUT);
-      $display("<scorePossible>%d</scorePossible>", tests);
-      $display("<scoreActual>%d</scoreActual>", tests - errors);
+      printPoints(tests, tests - errors);
       $finish;
    end
    

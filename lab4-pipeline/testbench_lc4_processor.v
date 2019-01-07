@@ -9,6 +9,7 @@
 `include ".set_testcase.v"
 
 module test_processor;
+   `include "print_points.v"
    `include "include/lc4_prettyprint_errors.v"
    
    integer     input_file, output_file, errors, tests;
@@ -112,14 +113,6 @@ module test_processor;
                             .test_dmem_data(test_dmem_data),
                             .switch_data(8'd0)
                             );
-
-   task printPoints;
-      input [31:0] possible, actual;
-      begin
-         $display("<scorePossible>%d</scorePossible>", possible);
-         $display("<scoreActual>%d</scoreActual>", actual);
-      end
-   endtask
    
    initial begin
       // Initialize Inputs
@@ -335,8 +328,6 @@ module test_processor;
       
       $display("Simulation finished: %d test cases %d errors [%s]", tests, errors, `INPUT_FILE);
       printPoints(tests, tests-errors); 
-      //$display("<scorePossible>%d</scorePossible>", tests);
-      //$display("<scoreActual>%d</scoreActual>", tests - errors);
       
       
       $display("  Instructions:         %d", insns);

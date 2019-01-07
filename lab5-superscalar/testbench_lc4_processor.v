@@ -9,6 +9,7 @@
 `include ".set_testcase.v"
 
 module test_processor;
+   `include "print_points.v"
    `include "include/lc4_prettyprint_errors.v"
    
    integer     input_file, output_file, errors, tests;
@@ -128,14 +129,6 @@ module test_processor;
                             );
    
    assign cur_pc_plus1 = cur_pc + 16'd1;
-
-   task printPoints;
-      input [31:0] possible, actual;
-      begin
-         $display("<scorePossible>%d</scorePossible>", possible);
-         $display("<scoreActual>%d</scoreActual>", actual);
-      end
-   endtask
 
    task assertEqual;
       input wire[15:0] expected, actual;
@@ -353,9 +346,6 @@ module test_processor;
       
       $display("Simulation finished: %d test cases %d errors [%s]", tests, errors, `INPUT_FILE);
       printPoints(tests, tests-errors); 
-      //$display("<scorePossible>%d</scorePossible>", tests);
-      //$display("<scoreActual>%d</scoreActual>", tests - errors);
-      
       
       $display("  Instructions:         %d", insns);
       $display("  Total Cycles:         %d", num_cycles);

@@ -9,6 +9,7 @@
 `include ".set_testcase.v"
 
 module test_processor;
+   `include "print_points.v"
    `include "include/lc4_prettyprint_errors.v"
    
    integer     input_file, output_file, errors, linenum, tests;
@@ -323,8 +324,7 @@ module test_processor;
       if (input_file) $fclose(input_file); 
       if (output_file) $fclose(output_file);
       $display("Simulation finished: %d test cases %d errors [%s]", tests, errors, `INPUT_FILE);
-      $display("<scorePossible>%d</scorePossible>", tests);
-      $display("<scoreActual>%d</scoreActual>", tests - errors);
+      printPoints(tests, tests - errors);
 
       $display("  Instructions:         %d", linenum);
       $display("  Total Cycles:         %d", num_cycles);

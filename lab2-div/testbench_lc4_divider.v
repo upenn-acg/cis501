@@ -24,6 +24,9 @@
 `endif
 
 module test_divider;
+
+`include "print_points.v"
+
    // status variables (number of errors and total number of tests)
    integer     input_file, errors, allTests, divTests;
 
@@ -179,9 +182,7 @@ module test_divider;
       end // end for
 
       $display("Simulation finished: %d test cases %d errors", allTests, errors);
-      $display("<scorePossible>%d</scorePossible>", allTests);
-      $display("<scoreActual>%d</scoreActual>", allTests - errors);
-
+      printPoints(allTests, allTests - errors);
       $finish;
    end
 

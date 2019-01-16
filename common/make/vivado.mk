@@ -81,8 +81,8 @@ impl: setup-files $(IMPL_SOURCES)
 
 # program the device with user-specified bitstream
 program:
-	@echo -n "Specify .bit file to use to program FPGA, then press [ENTER]: "
-	@read bitfile && export BITSTREAM_FILE=$$bitfile && $(time) vivado -mode batch -notrace -source $(TCL_DIR)/program.tcl
+	@echo -n "Specify .bit file to use to program FPGA, then press <ENTER> [leave blank for output/$(BITSTREAM_FILENAME)]: "
+	@read bitfile && if [ -z "$$bitfile" ]; then export BITSTREAM_FILE="output/$(BITSTREAM_FILENAME)" ; else export BITSTREAM_FILE=$$bitfile; fi && echo $$BITSTREAM_FILE && $(time) vivado -mode batch -notrace -source $(TCL_DIR)/program.tcl
 
 zip: $(ZIP_SOURCES)
 	zip $(ZIP_FILE) $(ZIP_SOURCES)

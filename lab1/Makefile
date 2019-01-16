@@ -6,6 +6,10 @@ TOP_SYNTH_MODULE=rca4
 TESTBENCH=rca_testbench.v
 TOP_TESTBENCH_MODULE=test_adders
 
+# zip file that gets uploaded to Canvas
+ZIP_SOURCES=rca.v output/rca4.bit
+ZIP_FILE=rca.zip
+
 # implementation files
 IMPL_SOURCES=$(SYNTH_SOURCES)
 TOP_IMPL_MODULE=rca4

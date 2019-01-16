@@ -177,4 +177,4 @@ In our experience, the Linux version is substantially more responsive than the W
 
 ## Submitting Code
 
-Once your code passes all the tests and the demo works as expected, you are ready to submit it **via Canvas**. 
+Once your code passes all the tests and the demo works as expected, you are ready to submit it **via Canvas**. Run the `make zip` command to generate an archive file `rca.zip` with the appropriate contents (your Verilog code and the bitstream), and then upload this file to Canvas.

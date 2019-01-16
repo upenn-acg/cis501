@@ -84,8 +84,9 @@ program:
 	@echo -n "Specify .bit file to use to program FPGA, then press <ENTER> [leave blank for output/$(BITSTREAM_FILENAME)]: "
 	@read bitfile && if [ -z "$$bitfile" ]; then export BITSTREAM_FILE="output/$(BITSTREAM_FILENAME)" ; else export BITSTREAM_FILE=$$bitfile; fi && echo $$BITSTREAM_FILE && $(time) vivado -mode batch -notrace -source $(TCL_DIR)/program.tcl
 
+# create a zip archive. We filter out warnings because for the ALU-only version of the processor labs we pull in a bitstream, even though the bitstream is only for the full version of the lab
 zip: $(ZIP_SOURCES)
-	zip $(ZIP_FILE) $(ZIP_SOURCES)
+	zip $(ZIP_FILE) $(ZIP_SOURCES) | grep -v warning
 
 # place arguments to Tcl debug/synthesis/implementation scripts into hidden files
 setup-files:

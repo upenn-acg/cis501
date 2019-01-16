@@ -156,9 +156,7 @@ When implementation completes, it should create a bitstream file `output/rca4.bi
 The simplest way to program the ZedBoards is to use a SEAS Linux machine, found in Moore 100A, the K
 Lab in Moore 200, and a few in Towne M70.
 
-Note that stations in the K Lab have both a Windows *and* a Linux
-machine (the Linux machines in the K Lab are the machines **with all-black USB ports on the
-front**. The machines with the blue USB 3.0 ports are the Windows machines.). You can switch between them via the KVM (keyboard/video/mouse) switch beneath the monitor: the Linux machine is typically **input 2**.
+> Note that stations in the K Lab have both a Windows *and* a Linux machine (the Linux machines in the K Lab are the machines **with all-black USB ports on the front**. The machines with the blue USB 3.0 ports are the Windows machines.). You can switch between them via the KVM (keyboard/video/mouse) switch beneath the monitor: the Linux machine is typically **input 2**.
 
 Once you login to the machine, follow the [instructions for connecting the
 ZedBoard](https://docs.google.com/presentation/d/1spwy8Ech3oLO72_VbKN5WkDlwbWy0WWISxv_lMjhRkg/edit?usp=sharing),

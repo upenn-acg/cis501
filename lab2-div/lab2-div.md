@@ -47,6 +47,9 @@ of the division operation. You can then instantiate 16 copies of this
 module to form the full divider. Think about how each output value is
 computed from the inputs.
 
+For cleaner code, you can use a Verilog `for` loop to create the `lc4_divider_one_iter` 
+copies, but creating the copies manually works just as well.
+
 ## Tests
 
 The testbench for the DIV/MOD unit is in

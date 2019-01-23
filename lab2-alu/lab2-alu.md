@@ -10,9 +10,8 @@ two register values, as input, and generates a single 16-bit output:
 
 + Basic ALU operations (ADD, MUL, SUB, DIV, MOD, AND, NOT, OR, XOR,
 SLL, SRA, SRL, CONST, HICONST): output the value that should be
-written back to the register file. Use your `lc4_divider` module for
-DIV and MOD. **Do not use Verilog's `/` and `%` operators. They will
-not synthesize.**
+written back to the register file. Use your `cla16` module for any operation that needs addition or subtraction. You can place a mux in front of the `cla16` inputs to reuse a single adder instance for all the different addition/substraction operations that are needed. Use your `lc4_divider` module for
+DIV and MOD. **Do not use Verilog's `+` `-` `/` `%` operators.** You can however use Verilog's `*` for your `MUL` implementation.
 + Memory operations (LDR, STR): output the generated effective memory address.
 + Comparison instructions (CMP, CMPU, CMPI, CMPIU): Output zero (`0000 0000 0000 0000`), one (`0000 0000 0000 0001`), or negative one (`1111 1111 1111 1111`), depending on the result of the comparison. This will be used later to set the NZP bits.
 + Branch instructions (BR, JMP, JMPR, JSR, JSRR, RTI, TRAP), the PC of the next instruction *if the branch were to be taken*. The ALU should not decide whether or not the branch actually will be taken, that will be done elsewhere in the datapath.
@@ -22,15 +21,18 @@ not synthesize.**
 ## ALU implementation pointers
 
 + **Do not start implementing until your schematic is complete!**
-+ Implement the basic ALU operations, including `+` and `*` using the built-in Verilog operators.
++ Implement the basic ALU operations, leveraging your `cla16` module.
 + Implement DIV and MOD using your `lc4_divider` module.
 + For shift operations, you need to build a barrel shifter.
-+ For comparisons, we recommend extending the input values to 17 bits using zero extension for unsigned comparisons, and sign extension for signed comparisons. This has the effect of translating both signed *and* unsigned 16-bit numbers into a signed 17-bit representation. Then perform the subtraction, and set the output accordingly.
++ For comparisons, we recommend using Verilog's comparison operators `>`,`<`,`<=`,`>=` in combination 
+  with the ternary operator. All wires in Verilog are unsigned by default, but the `signed` type is 
+  useful for implementing the `cmp` and `cmpi` instructions.
+
 
 ## Testing
 
 The testbench of the ALU is in `testbench_lc4_alu.v`, which internally
-uses `lc4_prettyprint_errors.v` and the input trace `test_lc4_alu.input`.
+uses `lc4_prettyprint_errors.v`.
 
 The testbench reads a series of instructions, PC, register values, and
 expected results from the input trace, executes them on your ALU,

@@ -1,1 +1,1 @@
-/mnt/castor/seas_home/d/devietti/371/solutions/lab2-alu/lc4_alu.v
+lc4_alu.v.soln

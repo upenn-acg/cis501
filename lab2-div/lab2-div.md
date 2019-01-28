@@ -27,7 +27,7 @@ int divide(int dividend, int divisor) {
     for (int i = 0; i < 16; i++) {
         remainder = (remainder << 1) | ((dividend >> 15) & 0x1);
         if (remainder < divisor) {
-            quotient = (quotient << 1) | 0x0;
+            quotient = (quotient << 1);
         } else {
             quotient = (quotient << 1) | 0x1;
             remainder = remainder - divisor;

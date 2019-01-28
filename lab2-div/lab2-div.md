@@ -58,4 +58,4 @@ Makefile with the command `make test`.
 
 ## Submitting your code
 
-As with previous labs, submit your code via Canvas.
+As with previous labs, submit your code via Canvas. You should submit just your `lc4_divider.v` file, there's no need to run `make zip`.

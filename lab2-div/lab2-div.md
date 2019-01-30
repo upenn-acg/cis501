@@ -41,7 +41,7 @@ int divide(int dividend, int divisor) {
 ```
 
 ## Corner case: dividing by 0
-A divisor of 0 is a special case, lc4_divider_one_iter should output 0 as o_remainder and o_quotient in this case.
+A divisor of 0 is a special case, `lc4_divider_one_iter` should output 0 as `o_remainder` and `o_quotient` in this case.
 
 ## Writing your code
 

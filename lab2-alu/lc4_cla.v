@@ -17,7 +17,7 @@ endmodule
  * @param gin incoming generate signals 
  * @param pin incoming propagate signals
  * @param cin the incoming carry
- * @param gout whether these 4 bits collectively generate a carry (takes cin into account)
+ * @param gout whether these 4 bits collectively generate a carry (ignoring cin)
  * @param pout whether these 4 bits collectively would propagate an incoming carry (ignoring cin)
  * @param cout the carry outs for the low-order 3 bits
  */

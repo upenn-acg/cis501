@@ -11,7 +11,7 @@ two register values, as input, and generates a single 16-bit output:
 + Basic ALU operations (ADD, MUL, SUB, DIV, MOD, AND, NOT, OR, XOR,
 SLL, SRA, SRL, CONST, HICONST): output the value that should be
 written back to the register file. Use your `cla16` module for any operation that needs addition or subtraction. You can place a mux in front of the `cla16` inputs to reuse a single adder instance for all the different addition/substraction operations that are needed. Use your `lc4_divider` module for
-DIV and MOD. **Do not use Verilog's `+` `-` `/` `%` operators.** You can however use Verilog's `*` for your `MUL` implementation.
+DIV and MOD. **Do not use Verilog's `+` `-` `/` `%` operators.** You can however use Verilog's `*` for your `MUL` implementation, and the various shift `<<` `>>` `>>>` and comparison operators.
 + Memory operations (LDR, STR): output the generated effective memory address.
 + Comparison instructions (CMP, CMPU, CMPI, CMPIU): Output zero (`0000 0000 0000 0000`), one (`0000 0000 0000 0001`), or negative one (`1111 1111 1111 1111`), depending on the result of the comparison. This will be used later to set the NZP bits.
 + Branch instructions (BR, JMP, JMPR, JSR, JSRR, RTI, TRAP), the PC of the next instruction *if the branch were to be taken*. The ALU should not decide whether or not the branch actually will be taken, that will be done elsewhere in the datapath.
@@ -24,7 +24,7 @@ DIV and MOD. **Do not use Verilog's `+` `-` `/` `%` operators.** You can however
 + **Do not start implementing until your schematic is complete!**
 + Implement the basic ALU operations, leveraging your `cla16` module.
 + Implement DIV and MOD using your `lc4_divider` module.
-+ For shift operations, you need to build a barrel shifter.
++ For shift operations, you can use the shift operators `<<` `>>` `>>>`.
 + For comparisons, we recommend using Verilog's comparison operators `>`,`<`,`<=`,`>=` in combination 
   with the ternary operator. All wires in Verilog are unsigned by default, but the `signed` type is 
   useful for implementing the `cmp` and `cmpi` instructions.

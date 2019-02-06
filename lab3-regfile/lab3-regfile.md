@@ -26,3 +26,7 @@ in the next step.
 The testbench for the register file is `testbench_lc4_regfile.v` and
 the input trace is `test_lc4_regfile.input`. You can run these tests
 via the `make test` command as usual.
+
+## Submitting
+
+You don't submit your register file code separately. You'll use your register file in your single-cycle processor and submit that instead. The register file is broken out into its own directory for simplicity.

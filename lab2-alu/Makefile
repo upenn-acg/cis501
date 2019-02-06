@@ -2,7 +2,7 @@
 SYNTH_SOURCES=lc4_alu.v lc4_divider.v lc4_cla.v
 TOP_SYNTH_MODULE=lc4_alu
 
-ZIP_SOURCES=lc4_alu.v lc4_divider.v lc4_cla.v
+ZIP_SOURCES=lc4_alu.v lc4_divider.v lc4_cla.v output/alu.bit
 ZIP_FILE=alu.zip
 
 # testbench files

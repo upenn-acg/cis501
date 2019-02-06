@@ -13,7 +13,7 @@ instruction reads from memory will be provided on the
 data that should be written to the `o_dmem_towrite` output.
 
 For testing purposes, you need to pass several key processor-internal
-signals as outputs from you processor module. These outputs are all
+signals as outputs from your processor module. These outputs are all
 declared in the `lc4_processor` module and must be connected properly
 for the test scripts to work.
 
@@ -97,7 +97,7 @@ If your design does not achieve timing closure with the default 15.625MHz clock,
 
 To actually change the clock frequency, edit the file `lab3-singlecycle/system/mmcm.v` at line 139. You can use the slack reported by Vivado to guide your decision about a new frequency to choose. E.g., if your design has a slack of -2ns, then your clock period needs to be ≥66ns instead of the default 64ns. [This online calculator](https://www.sensorsone.com/period-to-frequency-calculator/) is handy for seeing that a clock period of ≥66ns means a frequency ≤15.15MHz. So you could set the parameter `CLKOUT0_DIVIDE_F` to be 66.25, which would yield a resulting clock frequency of 15.09MHz which is sufficiently slow. 
 
-Re-run `make impl` and see if you achieve timing closure with the slower clock. You can also try running `make impl` multiple times, especially if you have a small negative slack, since timing closure may be achievable some of the time due to the nondeterministic choices made by Vivado. Overall, it pays to go with a slower clock than absolutely necessary. There are many ways to ask Vivado to try harder to achieve timing closure (without having to re-run it yourself), but then it runs for (even) longer.
+Re-run `make impl` and see if you achieve timing closure with the slower clock. You can also try running `make impl` multiple times, especially if you have a small negative slack, since timing closure may be achievable some of the time due to the nondeterministic choices made by Vivado. Overall, it pays to go with a slower clock than absolutely necessary. There are many ways to ask Vivado to try harder to achieve timing closure (without having to re-run it yourself), but then Vivado takes (even) longer to compile your code.
 
 ### Reporting timing results
 
@@ -116,4 +116,4 @@ TEST_CASE=lab3-demo make impl
 ```
 The first command uses PennSim to create a `lab3-demo.hex` file containing the code/data memory contents specified by `lab3-demo.asm`. The second command runs implementation, using `lab3-demo.hex` as the initial state for your processor's memory. 
 
-Once you program the ZedBoard, raise the rightmost switch on the ZedBoard (`SW0`) to set the global write-enable (`gwe`) signal. The right-most LED (`LD0`) shows the value of the `gwe` signal. Your processor should start executing, and your string should display on an attached VGA monitor. Show this to a TA to complete your demo.
+Once you program the ZedBoard, raise the rightmost switch on the ZedBoard (`SW0`) to set the global write-enable (`gwe`) signal. The right-most LED (`LD0`) shows the value of the `gwe` signal. Your processor should start executing, and your string should display on an attached VGA monitor. VGA cables are in the ZedBoard lockers, and there are monitors with VGA inputs in the K Lab and Moore 100A.

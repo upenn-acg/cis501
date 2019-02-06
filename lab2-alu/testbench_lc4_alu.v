@@ -100,7 +100,7 @@ module test_alu;
          if (expectedSum !== actualSum) begin
             $display("[cla] error a:%d + b:%d + cin:%d = sum:%d instead of %d", ain, bin, cin, actualSum, expectedSum);
             errors = errors+1;
-            $finish;
+            //$finish; // NB: uncomment this to terminate after the first error
          end
       end
 

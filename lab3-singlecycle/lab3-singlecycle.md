@@ -20,6 +20,12 @@ for the test scripts to work.
 All told, your implementation should need at most 150-200 lines of
 Verilog.
 
+## Disallowed Verilog Operators
+
+You will re-use your ALU module from Lab 2. The operators disallowed within these modules are from the previous labs.
+
+You will need an incrementer for the `PC`; for this you can instantiate your `cla16` module. You cannot use the `+` or `-` operators in your `lc4_processor` module.
+
 ## Testing and Debugging
 
 At the end of the `lc4_processor` module, we've included an `always`

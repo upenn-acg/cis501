@@ -9,7 +9,7 @@ module lc4_decoder(input  wire [15:0] insn,               // instruction
                    output wire [ 2:0] wsel,               // rd
                    output wire        regfile_we,         // does this instruction write to rd?
                    output wire        nzp_we,             // does this instruction write the NZP bits?
-                   output wire        select_pc_plus_one, // route PC+1 to the ALU instead of rs?
+                   output wire        select_pc_plus_one, // write PC+1 to the regfile?
                    output wire        is_load,            // is this a load instruction?
                    output wire        is_store,           // is this a store instruction?
                    output wire        is_branch,          // is this a branch instruction?

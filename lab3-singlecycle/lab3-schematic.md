@@ -1,6 +1,6 @@
 # Lab 3: Single-cycle Datapath Schematic
 
-You must create schematics of your **register file** and **datapath**, with all wires, ports, and module instantiations labeled. Examine the template code in the other lab3 directories to see what the interface to the `lc4_regfile`, `lc4_processor` and other modules is.
+You must create schematics of your **register file** and **control+datapath**, with all wires, ports, and module instantiations labeled. Examine the template code in the other lab3 directories to see what the interface to the `lc4_regfile`, `lc4_processor` and other modules is.
 
 This schematic will be *much* more complex than your ALU, so it is essential that your schematic has the necessary detail and legibility to help you implement the single-cycle datapath.
 

@@ -8,7 +8,7 @@ To set the initial value of a register, modify the second parameter value. Note 
 
 The initial value of your `pc_reg` in the Fetch stage should be `16'h8200`.
 
-The only time you should stall unnecessarily is on a `BRnzp` instruction that depends on a prior load. (Technically, `BRnzp` doesn't depend on the condition codes of the previous instruction since it will always be taken, but we'll assume any good compiler/programmer will a `JMP` insn instead to you don't have to handle BRnzp specially).
+The only time you should stall unnecessarily is on a `BRnzp` instruction that depends on a prior load. (Technically, `BRnzp` doesn't depend on the condition codes of the previous instruction since it will always be taken, but we'll assume any good compiler/programmer will use a `JMP` insn instead to you don't have to handle BRnzp specially).
 
 You should bypass at the beginning of a stage to the beginning of another stage, so that values are bypassed right after they come out of your pipeline registers. Some groups have in the past implemented this lab so that they bypass from the end of a stage to the end of another stage, but this is more difficult.
 
@@ -39,16 +39,16 @@ All other ports on the processor module are identical to your single-cycle imple
 
 ### General Advice
 
-Writing sub-modules: It is tempting to make one module for each pipeline stage and/or for each pipeline register. We recommend against this. A single, giant module is easier to debug because you can view all the signals in one big list in the debugger. Combinational loops are also somewhat likelier this way, which will cause the simulator to hang (`make synth` will catch such loops, however).
+Writing sub-modules: It is tempting to make one module for each pipeline stage and/or for each pipeline register. We recommend against this. A single, large module is easier to debug because you can view all the signals in one big list in the debugger. Combinational loops are also somewhat likelier this way, which will cause the simulator to hang (`make synth` will catch such loops, however).
 
 Port/Wire Shadowing: Make sure you do not declare any wires with the same name as a port (equivalent to variable shadowing). By default, the synthesizer will issue a warning about this and ignore the second declaration. One good rule of thumb is to avoid any wire declarations that start with `o_`, `i_`, or `test_`. Reserve these prefixes for the ports.
 
 ## Debugging
 
-Debugging this assignment will be *much*, **much** harder than debugging the single-cycle datapath. **Get started early and plan on many debug sessions involving all team members!** Having a clear schematic that matches up with your code will make life much easier. Also consider the following debugging tips:
+Debugging this assignment will be **noticeably** harder than debugging the single-cycle datapath. **Get started early and plan on many debug sessions involving all team members!** Also consider the following debugging tips:
 
 + In the output pane, right-click your PC wires and any others whose values your are monitoring as numbers, and set their radix to hexadecimal.
-+ The skeleton `lc4_pipeline.v` contains an `always (posedge gwe)` block at the end. Leave this at the end of the module and add `$display` statements to print out values you are interested in. These will get printed at the end of each cycle, when all wire values are valid. Please **comment out these $display statements** before submitting code to the autograder, as the autograder's email will truncate output (which may contain relevant errors/warnings).
++ The skeleton `lc4_pipeline.v` contains an `always (posedge gwe)` block at the end. Leave this at the end of the module and add `$display` statements to print out values you are interested in. These will get printed at the end of each cycle, when all wire values are valid. Please **comment out these $display statements** before submitting code to the autograder, as the autograder's email will truncate output (which may then excise relevant errors/warnings).
 + You can set a breakpoint on a `$display` call in your `always` block to get Vivado to break at the end of each cycle. This is much more effective than setting breakpoints elsewhere in your code. An empty `$display();` statement at the very end of the block is especially useful for setting a breakpoint. You can also single-step forward 40ns to move forward one cycle.
 + Start with the `test_alu` test case, and do not move on until it is completely working. Move through the test cases one by one.
 + The testbench can be configured (set `exit_at_first_failure = 1`) to stop as soon as it encounters an error and print out both the line number (n) and instruction.
@@ -56,6 +56,12 @@ Debugging this assignment will be *much*, **much** harder than debugging the sin
     + Next, step through your code by setting a breakpoint in the `always` block, and compare your signals to the expected values in every pipeline stage. This is very helpful to identify undeclared wires (which default to 1 bit wide), incorrect bypass logic, etc.
 + You can print out an instruction's disassembly inside the `@always` block via the `pinstr()` subroutine. See the file `include/lc4_prettyprint_errors.v` for more details.
 
+## Timing closure
+
+You should verify _timing closure_ (i.e., that your processor isn't overclocked) for your design just as [in Lab 3](https://github.com/upenn-acg/cis501/blob/master/lab3-singlecycle/lab3-singlecycle.md#verify-timing-closure). There is no frequency target for you to hit, you can lower the clock as needed to achieve timing closure.
+
+Be sure to report your timing results to the **Lab 4: Implementation timing results** assignment on Canvas. Each group member should do this separately, due to Canvas limitations and also to give us more datapoints since Vivado employs some randomized algorithms.
+
 ## Demo
 
-TBD
+There is no demo for this lab.

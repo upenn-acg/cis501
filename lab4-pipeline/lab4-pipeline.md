@@ -60,7 +60,7 @@ Debugging this assignment will be **noticeably** harder than debugging the singl
 
 You should verify _timing closure_ (i.e., that your processor isn't overclocked) for your design just as [in Lab 3](https://github.com/upenn-acg/cis501/blob/master/lab3-singlecycle/lab3-singlecycle.md#verify-timing-closure). There is no frequency target for you to hit, you can lower the clock as needed to achieve timing closure.
 
-Be sure to report your timing results to the **Lab 4: Implementation timing results** assignment on Canvas. Each group member should do this separately, due to Canvas limitations and also to give us more datapoints since Vivado employs some randomized algorithms.
+Be sure to report your timing results to the **Lab 4: Pipelining Implementation timing results** assignment on Canvas. Each group member should do this separately, due to Canvas limitations and also to give us more datapoints since Vivado employs some randomized algorithms.
 
 ## Demo
 

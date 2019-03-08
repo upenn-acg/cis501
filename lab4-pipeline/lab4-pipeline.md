@@ -2,7 +2,7 @@
 
 Your pipelined LC4 processor must be fully-bypassed, and must predict all branches as not taken (including JMP, TRAP, and RTI). It should stall only in the load-to-use case. To be clear, when you encounter a load-to-use, you insert the NOP bubble as if it was between the load and the use. For example, if you have a `load` followed by an `add`, it would look in the pipeline like you have `load` followed by `NOP` followed by `add` - `load` in W, `NOP` in M, `add` in X.
 
-At startup, the pipeline should be filled with NOPs and treated as instructions that were flushed due to a branch mispredict (i.e. `test_stall` should be set to 2 - see below). Implement this by setting the default values of your pipeline registers appropriate. See the declaration of `pc_reg` in the single-cycle data path for an example.
+At startup, the pipeline should be filled with NOPs and treated as instructions that were flushed due to a branch mispredict (i.e. `test_stall` should be set to 2 - see below). Implement this by setting the default values of your pipeline registers appropriately. See the declaration of `pc_reg` in the single-cycle data path for an example.
 
 To set the initial value of a register, modify the second parameter value. Note that reading from a register takes place before writing to it.
 

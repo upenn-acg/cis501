@@ -43,3 +43,7 @@ In the objects pane in the Vivado debugger (accessible via `make debug`), you ca
 Use the scopes pane in the Vivado debugger to select which module's wires are shown in the objects pane. This lets you see the values within a module to help debug.
 
 **Build your bypass and dispatch logic up step-by-step!** Use intermediate wires for computing each possible bypass, then combine these signals into the final bypassed values. Do the same thing for determining which instructions to dispatch. Most of your bugs are likely to be in this logic, and it will be almost impossible to get "jumbo" expressions working properly if written from scratch.
+
+## Demo
+
+Demo information TBD

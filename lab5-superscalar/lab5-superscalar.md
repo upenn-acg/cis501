@@ -1,6 +1,6 @@
 # The Superscalar Pipelined Datapath
 
-Your superscalar pipeline must be fully bypassed, and must predict all branches as *not taken* (including JMP, TRAP, and RTI), according to the same rules as your scalar pieline. It should stall only in the load-to-use case and for superscalar hazards. Instead of bypassing from W->D, your register file should bypass its inputs to its outputs. This will be much simpler to implement. The only significant difference in the module definition from previous labs is that there are now *two* instruction input ports. There is still a single port for accessing data memory, however, so you should never dispatch two load/store instructions in parallel.
+Your superscalar pipeline must be fully bypassed, and must predict all branches as *not taken* (including JMP, TRAP, and RTI), according to the same rules as your scalar pipeline. It should stall only in the load-to-use case and for superscalar hazards. Instead of bypassing from W->D, your register file should bypass its inputs to its outputs. This will be much simpler to implement. The only significant difference in the module definition from previous labs is that there are now *two* instruction input ports. There is still a single port for accessing data memory, however, so you should never dispatch two load/store instructions in parallel.
 
 The initial value of your `pc_reg` in Fetch should be `16'h8200`.
 

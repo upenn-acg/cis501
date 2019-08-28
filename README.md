@@ -1,4 +1,4 @@
-This is the repository for the labs in CIS 501 Spring 2019.
+This is the repository for the labs in [CIS 501: Computer Architecture](http://cis.upenn.edu/~cis501/current/).
 
 ## Description of files in common/ directory
 

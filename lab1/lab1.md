@@ -90,7 +90,7 @@ One important thing to note - you should never have any **CRITICAL WARNINGS** in
 
 #### Benign Warnings
 
-Some of the Vivado warnings are benign or unavoidable. We catalog some of these below:
+Some of the Vivado warnings are benign or unavoidable. Unfortunately we don't know a good way to suppress these warnings without also suppressing other useful ones. We catalog some of these benign warnings below:
 
 ```
 WARNING: [Synth 8-3917] design rca4 has port LED[7] driven by constant 0
@@ -117,19 +117,18 @@ Vivado runs to make sure that the design is reasonable. Sometimes they overlap
 with the warnings in `vivado.log`, but often they are separate and no less
 serious.
 
-One DRC warning that you *can* ignore is the following:
+Two DRC warnings that you *can* ignore are the following:
 ```
 ZPS7-1#1 Warning
 PS7 block required
-The PS7 cell must be used in this Zynq design in order to enable correct default configuration.
-Related violations: <none>
 ```
+See the PS7 discussion under _Benign Warnings_ above.
 
-It says that all designs should have a PS7 block, which represents the embedded
-ARM cores on the Zedboard's FPGA. For this class, we will use just the
-"programmable logic" (Vivado calls this the "PL" sometimes) and we don't need
-the ARM cores. Unfortunately, we don't know a good way to disable this warning
-without also disabling other useful warnings.
+```
+**NSTD-1#1 Critical Warning
+Unspecified I/O Standard
+```
+This can appear when you run `make synth` but should disappear when you run `make impl`. It arises because, during synthesis, Vivado seems to ignore information about the physical ZedBoard specifications, and then it gives this warning complaining that it doesn't have information about the electrical characteristics of the various I/O pins in the design. In `make impl`, Vivado does take the physical specs into account which avoids this warning.
 
 There are other interesting reports in the `output/` directory. We'll dig into
 these more in future labs, but here's a quick summary:

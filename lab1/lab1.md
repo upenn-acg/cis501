@@ -71,16 +71,7 @@ doesn't mean much!
 
 So, after synthesis finishes running, you should examine the log files to check
 for warnings. First, examine the file `vivado.log` which records everything that
-was printed to the screen while synthesis ran. Some of these warnings are
-benign, such as:
-
-```
-WARNING: [Synth 8-3917] design rca4 has port LED[7] driven by constant 0
-```
-
-Only 4 of the Zedboard's 8 LEDs are used in this lab, so the high-order four
-LEDs (7-4) are hard-wired to zero which is fine. Other warnings are more
-serious:
+was printed to the screen while synthesis ran. Here are some tips on how to interpret the messages you see:
 
 + A "net without a driver" is a wire that does not have anything
 connected to it, which is usually indicative of a bug.
@@ -95,6 +86,27 @@ valuable hints about the bugs you encounter in future labs. As you fix bugs, you
 can re-run synthesis via `make synth` to see if the warning goes away, or is
 perhaps replaced by another one - sometimes one bug can mask another!
 
+One important thing to note - you should never have any **CRITICAL WARNINGS** in your design. If Vivado identifies a hard **ERROR** it will stop synthesis/implementation, but critical warnings are often permitted through. But it is in your best interest to fix them.
+
+#### Benign Warnings
+
+Some of the Vivado warnings are benign or unavoidable. We catalog some of these below:
+
+```
+WARNING: [Synth 8-3917] design rca4 has port LED[7] driven by constant 0
+```
+Only 4 of the Zedboard's 8 LEDs are used in this lab, so the high-order four
+LEDs (7-4) are hard-wired to zero which is fine. 
+
+```
+WARNING: [Vivado 12-3502] Design has no clocks defined.
+```
+This is ok because the Lab 1 design is purely combinational, so we don't expect it to have any clocks.
+
+```
+WARNING: [DRC ZPS7-1] PS7 block required
+```
+Vivado reminds us that we aren't using the ARM cores embedded on the FPGA, which is fine because we don't need them for anything.
 
 ### Examine Design Rule Checks Report
 

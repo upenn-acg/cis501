@@ -5,7 +5,7 @@ self-contained ALU datapath with the corresponding control signals.
 ## ALU Specification
 
 Your code should live in the `lc4_alu` module. This module takes a
-16-bit instruction and two 16-bit data values, corresponding to the
+16-bit instruction and two 16-bit data values (`rs` is in `r1data` and `rt` is in `r2data`), corresponding to the
 two register values, as input, and generates a single 16-bit output:
 
 + Basic ALU operations (ADD, MUL, SUB, DIV, MOD, AND, NOT, OR, XOR,

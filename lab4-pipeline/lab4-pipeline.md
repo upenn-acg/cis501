@@ -6,11 +6,11 @@ At startup, the pipeline should be filled with NOPs and treated as instructions 
 
 To set the initial value of a register, modify the second parameter value.
 
-Note that **reading from a register takes place before writing to it**.
+Note that **reading from a register takes place before writing to it**. You will need to implement a **WD bypass** to match our solution, and avoid stalling when the W insn writes to a register that the D insn reads from.
 
 The initial value of your `pc_reg` in the Fetch stage should be `16'h8200`.
 
-The only time you should stall unnecessarily is on a `BRnzp` instruction that depends on a prior load. (Technically, `BRnzp` doesn't depend on the condition codes of the previous instruction since it will always be taken, but we'll assume any good compiler/programmer will use a `JMP` insn instead to you don't have to handle BRnzp specially).
+The only time you should stall unnecessarily is on a `BRnzp` instruction that depends on a prior load. (Technically, `BRnzp` doesn't depend on the condition codes of the previous instruction since it will always be taken, but we'll assume any good compiler/programmer will use a `JMP` insn instead to you don't have to handle `BRnzp` specially).
 
 You should bypass at the beginning of a stage to the beginning of another stage, so that values are bypassed right after they come out of your pipeline registers. Some groups have in the past implemented this lab so that they bypass from the end of a stage to the end of another stage, but this is more difficult.
 

@@ -19,11 +19,11 @@ Your datapath must contain the following elements:
    + 2: flushed due to misprediction or because the first real instruction hasn't made it through to the writeback stage yet
    + 3: stalled due to load-to-use penalty
 + **Decode:** Decode both instructions in parallel. Determine if there are any dependencies between them (one depends on a value computed by the other, or if both are load/store instructions). Dispatch the instructions according to the following rules: 
-   1. If instruction A incurs a load-to-use stall, insert a NOP into *both* pipes, and stall the fetch and decode stages. Record a load-to-use stall in pipe A and a superscalar stall in pipe B (see below).
-   1. If instruction B incurs a load-to-use stall, but does not have any dependencies on instruction A, and instruction A does not stall, insert a NOP into pipeline B and record it as a load-to-use stall.
-   1. If instruction B requires a value computed by A (including if A is a load), and instruction A does not stall, insert a NOP into pipe B, and record it as a **superscalar stall**.
-   1. If neither instruction incurs a load-to-use stall, and instruction B does not depend on instruction A, then both instructions advance normally.
-   1. If you have two independent instructions that interact with memory in the same stage (e.g., two loads, or a load and a store), B incurs a **superscalar stall**, since only one instruction can interact with memory at a time.
+   1. If instruction Decode.A (the insn in the Decode stage in the A pipe) incurs a load-to-use stall, insert a NOP into *both* pipes, and stall the fetch and decode stages. Record a load-to-use stall in pipe A and a superscalar stall in pipe B (see below).
+   1. If instruction Decode.B incurs a load-to-use stall, but does not have any dependencies on instruction Decode.A, and instruction Decode.A does not stall, insert a NOP into pipeline B and record it as a load-to-use stall.
+   1. If instruction Decode.B requires a value computed by Decode.A (including if Decode.A is a load), and instruction Decode.A does not stall, insert a NOP into pipe B, and record it as a **superscalar stall**.
+   1. If neither instruction incurs a load-to-use stall, and instruction Decode.B does not depend on instruction Decode.A, then both instructions advance normally.
+   1. If you have two independent instructions that interact with memory in the same stage (e.g., two loads, or a load and a store), instruction Decode.B incurs a **superscalar stall**, since only one instruction can interact with memory at a time.
    1. If you encounter a case where you could produce a NOP bubble that is either a superscalar or load-to-use stall, the superscalar stall takes precedence.
 + **Dispatch (Fetch/Decode):** When both instructions advance out of the decode stage in parallel, `o_cur_pc` should increase by two (since you just dispatched two instructions). When only one instruction advances out of decode, only one instruction can advance out of fetch. To maintain the illusion of in-order execution, this means instructions need to *switch pipes*: 
    + `decode.insn_A` advances to `execute.insn_A`

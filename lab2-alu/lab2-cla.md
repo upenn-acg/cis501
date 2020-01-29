@@ -72,17 +72,27 @@ endmodule
 ```
 
 For a *to-be-determined* amount of extra credit and general goodwill, implement
-this parameterized `gpn` module. You can then use `gpn #(4) g` as your
-implementation of `gp4`. This parameterizable module makes it easier to
-experiment with different CLA hierarchies or addition of various widths.
+this parameterized `gpn` module at the bottom of the file `lc4_cla.v`. You can
+then use `gpn #(4) g` as your implementation of `gp4` above if you want. This
+parameterizable module makes it easier to experiment with different CLA
+hierarchies or addition of various widths.
 
-It will require making heavy use of `for` loops to generate varying amount of
-hardware. Note also that `for` loops can be nested. 
+It will require making non-trivial use of `for` loops to generate varying amount
+of hardware. Note also that `for` loops can be nested.
 
+We'll test your `gpn` module with various parameterization values of `N>=2`, and
+check that your code produces the same output as our reference version. Note
+that we are not releasing test cases for `gpn` (though you are welcome to write
+your own), and you can see the autograder output as well.
+
+You can submit your `lc4_cla.v` file with your implementation of `gpn` in it via
+Canvas, to the separate Lab 2 Extra Credit assignment.
+
+<!---
 It seems likely that a 2-level CLA adder that is parameterizable in the width of
 the addition (and probably also in the number of first-level `gpn` blocks) can
 also be built. This would make it easy to experiment with different CLA
 hierarchies to see which are fastest on our ZedBoards.
-
+-->
 
 

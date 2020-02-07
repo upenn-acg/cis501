@@ -107,7 +107,7 @@ Re-run `make impl` and see if you achieve timing closure with the slower clock. 
 
 ### Reporting timing results
 
-Once you have timing closure, you can submit results to the **Lab 3: Implementation timing results** assignment on Canvas. Each group member should do this separately, due to Canvas limitations and also to give us more datapoints since Vivado uses randomness extensively.
+Your timing results (and metrics for area and power) are automatically included in the .zip file you submit via Canvas. We'll use this to look at resource consumption across all the designs in the class.
 
 ### Run demo
 

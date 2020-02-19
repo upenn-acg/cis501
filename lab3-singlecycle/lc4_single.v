@@ -128,7 +128,7 @@ module lc4_processor
       // The Objects pane will update to display the wires
       // in that module.
 
-      $display();
+      // $display();
    end
 `endif
 endmodule

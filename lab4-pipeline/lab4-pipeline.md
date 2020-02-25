@@ -6,7 +6,7 @@ At startup, the pipeline should be filled with NOPs and treated as instructions 
 
 To set the initial value of a register, modify the second parameter value.
 
-Note that **reading from a register takes place before writing to it**. You will need to implement a **WD bypass** to match our solution, and avoid stalling when the W insn writes to a register that the D insn reads from.
+Note that **reading from a register takes place before writing to it**. You will need to implement a **WD bypass** to avoid stalling when the W insn writes to a register that the D insn reads from in the same cycle.
 
 The initial value of your `pc_reg` in the Fetch stage should be `16'h8200`.
 

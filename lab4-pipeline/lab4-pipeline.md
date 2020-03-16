@@ -2,6 +2,8 @@
 
 Your pipelined LC4 processor must be fully-bypassed, and must predict all branches as not taken (including JMP, TRAP, and RTI). It should stall only in the load-to-use case. To be clear, when you encounter a load-to-use, you insert the NOP bubble as if it was between the load and the use. For example, if you have a `load` followed by an `add`, it would look in the pipeline like you have `load` followed by `NOP` followed by `add` - `load` in W, `NOP` in M, `add` in X.
 
+If there is a **degenerate BR** _B0_ whose target is the next insn (i.e., PC+1), then the not-taken and taken paths are the same for _B0_. However, you should not implement extra logic for this degenerate case. If _B0_ is not taken (based on the NZP registers) then you should not have a flush; if _B0_ is taken, then you should flush. Treat _B0_ just like any other BR, and consider only the taken/not-taken behavior when identifying mispredictions and flushing. Consider also a related degenerate BR _B1_ where the target is PC+2: when we detect the misprediction in Execute the correct target just so happens to be in Fetch, and we could get by with flushing just the Decode insn. Nevertheless, treat all BRs uniformly and flush both Fetch & Decode for _B1_ as well.
+
 At startup, the pipeline should be filled with NOPs and treated as instructions that were flushed due to a branch mispredict (i.e. `test_stall` should be set to 2 - see below). Implement this by setting the default values of your pipeline registers appropriately. See the declaration of `pc_reg` in the single-cycle data path for an example.
 
 To set the initial value of a register, modify the second parameter value.
@@ -10,7 +12,7 @@ Note that **reading from a register takes place before writing to it**. You will
 
 The initial value of your `pc_reg` in the Fetch stage should be `16'h8200`.
 
-The only time you should stall unnecessarily is on a `BRnzp` instruction that depends on a prior load. (Technically, `BRnzp` doesn't depend on the condition codes of the previous instruction since it will always be taken, but we'll assume any good compiler/programmer will use a `JMP` insn instead to you don't have to handle `BRnzp` specially).
+The only time you should stall unnecessarily is on a `BRnzp` instruction that depends on a prior load. (Technically, `BRnzp` doesn't depend on the condition codes of the previous instruction since it will always be taken, but we'll assume any good compiler/programmer will use a `JMP` insn instead so you don't have to handle `BRnzp` specially).
 
 You should bypass at the beginning of a stage to the beginning of another stage, so that values are bypassed right after they come out of your pipeline registers. Some groups have in the past implemented this lab so that they bypass from the end of a stage to the end of another stage, but this is more difficult.
 

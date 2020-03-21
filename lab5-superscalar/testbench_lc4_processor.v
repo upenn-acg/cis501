@@ -286,13 +286,16 @@ module test_processor;
 
             assertEqual(.expected(verify_regfile_we_A), .actual(test_regfile_we_A), .label("test_regfile_we_A"));
 
-            assertEqual(.expected(verify_regfile_wsel_A), .actual(test_regfile_wsel_A), .label("test_regfile_wsel_A"));
-
-            assertEqual(.expected(verify_regfile_data_A), .actual(test_regfile_data_A), .label("test_regfile_data_A"));
+            if (verify_regfile_we_A) begin
+               assertEqual(.expected(verify_regfile_wsel_A), .actual(test_regfile_wsel_A), .label("test_regfile_wsel_A"));
+               assertEqual(.expected(verify_regfile_data_A), .actual(test_regfile_data_A), .label("test_regfile_data_A"));
+            end
 
             assertEqual(.expected(verify_nzp_we_A), .actual(test_nzp_we_A), .label("test_nzp_we_A"));
 
-            assertEqual(.expected(verify_nzp_new_bits_A), .actual(test_nzp_new_bits_A), .label("test_nzp_new_bits_A"));
+            if (verify_nzp_we_A) begin
+               assertEqual(.expected(verify_nzp_new_bits_A), .actual(test_nzp_new_bits_A), .label("test_nzp_new_bits_A"));
+            end
 
             assertEqual(.expected(verify_dmem_we_A), .actual(test_dmem_we_A), .label("test_dmem_we_A"));
 
@@ -323,13 +326,16 @@ module test_processor;
 
             assertEqual(.expected(verify_regfile_we_B), .actual(test_regfile_we_B), .label("test_regfile_we_B"));
 
-            assertEqual(.expected(verify_regfile_wsel_B), .actual(test_regfile_wsel_B), .label("test_regfile_wsel_B"));
-
-            assertEqual(.expected(verify_regfile_data_B), .actual(test_regfile_data_B), .label("test_regfile_data_B"));
+            if (verify_regfile_we_B) begin
+               assertEqual(.expected(verify_regfile_wsel_B), .actual(test_regfile_wsel_B), .label("test_regfile_wsel_B"));
+               assertEqual(.expected(verify_regfile_data_B), .actual(test_regfile_data_B), .label("test_regfile_data_B"));
+            end
 
             assertEqual(.expected(verify_nzp_we_B), .actual(test_nzp_we_B), .label("test_nzp_we_B"));
 
-            assertEqual(.expected(verify_nzp_new_bits_B), .actual(test_nzp_new_bits_B), .label("test_nzp_new_bits_B"));
+            if (verify_nzp_we_B) begin
+               assertEqual(.expected(verify_nzp_new_bits_B), .actual(test_nzp_new_bits_B), .label("test_nzp_new_bits_B"));
+            end
 
             assertEqual(.expected(verify_dmem_we_B), .actual(test_dmem_we_B), .label("test_dmem_we_B"));
 

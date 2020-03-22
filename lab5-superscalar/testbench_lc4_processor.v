@@ -139,9 +139,6 @@ module test_processor;
             $display("Error at cycle %d: %s should be %h (but was %h)",
                      num_cycles, label, expected, actual);
             errors = errors + 1;
-            if (exit_at_first_failure) begin
-               $finish;
-            end
          end
       end
    endtask
@@ -344,6 +341,11 @@ module test_processor;
             assertEqual(.expected(verify_dmem_data_B), .actual(test_dmem_data_B), .label("test_dmem_data_B"));
 
          end // non-stall cycle, B pipe
+
+         if (exit_at_first_failure && errors > 0) begin
+            $display("Encountered errors, exiting...");
+            $finish;
+         end
          
       end // while ($fscanf(input_file, ...))
 

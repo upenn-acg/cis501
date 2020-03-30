@@ -64,13 +64,12 @@ Does `D.A` have a LTU dependence?
      - Yes: Record a LTU stall in pipe B, and stall only pipe B (see Pipe Switching section).
      - No: No stalling. Both instructions advance normally.
 
-### Pipe Swithing
+### Pipe Switching
 
 As mentioned above, whenever **only** Pipe B stalls, you need to perform pipe switching. Here is what this involves: 
   + `D.insn_A` advances to `X.insn_A`
   + `D.insn_B` advances to `D.insn_A` so that it will be the "first" instruction advancing out of decode on the next cycle. 
-  + `F.insn_A` advances to `D.insn_B`.
-  <!--- + `F.insn_B` advances to `F.insn_A` (see note below). --->
+  + `F.insn_A` advances to `D.insn_B`. <!--- + `F.insn_B` advances to `F.insn_A` (see note below). --->
   + `o_cur_pc` increases by one since only one instruction advanced out of decode.
   + Execute, Memory, and Writeback instructions advance normally.
   

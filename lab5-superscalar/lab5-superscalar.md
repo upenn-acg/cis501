@@ -11,8 +11,8 @@ Your datapath must contain the following elements:
 + **Two In-Order Pipelines:** These are referred to as "pipe A" and "pipe B." Pipe B contains the instruction immediately following the parallel instruction in pipe A (unless pipe B contains a pipeline bubble).
 + **Multi-Ported, Bypassed Register File:** You will need to create a register file with two write ports and four read ports. We have provided the module interface in `lc4_regfile_ss.v` (Note: Port names for the register file *are different from* previous labs!).
    + If both write ports specify the same destination, only pipe B's write should succeed (since the instruction in pipe B follows the instruction in pipe A in program order).
-   + Any values being written to the register file should be bypassed to the ouputs (read ports) so that values being written are immediately available. This *eliminates* the need to bypass from Writeback to Decode in the pipeline.
-+ **Fetch:** Instead of fetching a single instruction, you will (normally) fetch two *consecutive* instructions (i.e. `o_cur_pc` and `o_cur_pc + 1`. The provded skeleton code automatically handles this and gives both instructions to your module.
+   + Any values being written to the register file should be bypassed to the outputs (read ports) so that values being written are immediately available. This *eliminates* the need to bypass from Writeback to Decode in the pipeline.
++ **Fetch:** Instead of fetching a single instruction, you will (normally) fetch two *consecutive* instructions (i.e. `o_cur_pc` and `o_cur_pc + 1`. The provided skeleton code automatically handles this and gives both instructions to your module.
 + the **test_stall** signal can take on the following values:
    + 0: no stall
    + 1: **superscalar stall** (see Stalling section below)

@@ -20,7 +20,7 @@ Your datapath must contain the following elements:
    + 3: stalled due to load-to-use penalty
 + **Decode:** Decode both instructions in parallel. Determine if there are any dependencies between them (one depends on a value computed by the other, or if both are load/store instructions). Note that this is much more complicated than in the previous lab; see the Stalling section below for details. After determining the dependencies, dispatch the instructions, and report the appropriate stall values, according to the rules given in the Stalling section.  
 + **Dispatch (Fetch/Decode):** When both instructions advance out of the decode stage in parallel, `o_cur_pc` should increase by two (since you just dispatched two instructions). When only one instruction advances out of decode, only one instruction can advance out of fetch (and `o_cur_pc` should increase by 1). To maintain the illusion of in-order execution, this means instructions need to *switch pipes*, as outlined in the Pipe Switching section below.
-+ **Execute/Memory/Writeback:** These stages will be essentially identical to your previous lab. If you handled dependencies properly in decode, the there will never be two load/stores in the memory stage at the same time.
++ **Execute/Memory/Writeback:** These stages will be essentially identical to your previous lab. If you handled dependencies properly in decode, there will never be two load/stores in the memory stage at the same time.
 + **Bypassing Logic:** You'll need to bypass between pipes A and B as well as within them. All of the bypasses from Lab 4 will be used here, except for the WD bypass, since that is handled by the new register file. When choosing between `y.A` and `y.B` for the source of the bypass, where `y` is a stage (e.g. Memory), you should prioritize `y.B` since that is the more recent instruction. For example, you should prioritize `M.B` over `M.A` when bypassing to `X`. There is also a new **MM bypass**, which forwards data from the M stage of pipe A to the M stage of pipe B. This is used when you have for example an `ADD` to register `x` followed directly by a `STR` of register `x` (for the data only, not the address!).
 + **Squash Logic:** Pipeline flushes affect both pipes. Note that a branch can be in either `X.A` or `X.B` when it is found to be taken. In either case, when a branch is found to be taken, the stages `F.A`, `F.B`, `D.A` and `D.B` need to be flushed. In addition, if the branch is in `X.A` when it is taken, then the `X.B` stage also must be flushed, since its instruction comes after the branch instruction and is thus incorrect. If the branch is in `X.B` when it is taken, no additional flush should occur.
 
@@ -40,7 +40,7 @@ There are several dependencies that can occur in the superscalar pipeline:
 
 For ease of reference in the next section, in case (1) we say that "`D.A` has a LTU dependence". In case (2) we say that "`D.B` has a LTU dependence". Cases (3) and (4) are called "superscalar dependencies".
 
-Note: It's possible to have more than one dependence present.
+Note: It's possible to have more than one dependence present in a given cycle.
 
 
 ### Rules for stalling:
@@ -72,7 +72,6 @@ As mentioned above, whenever **only** Pipe B stalls, you need to perform pipe sw
   + `F.insn_A` advances to `D.insn_B`.
   + `o_cur_pc` increases by one since only one instruction advanced out of decode.
   + Execute, Memory, and Writeback instructions advance normally.
-  <!--- + `F.insn_B` advances to `F.insn_A` (see note below). --->
   
 What about `F.insn_B`? Note that, since the PC increases by 1, the current `F.insn_B` will be fetched again in the next cycle, but this time into `F.insn_A`. This takes care of moving `F.insn_B` to `F.insn_A`.
   
@@ -143,4 +142,4 @@ Use the scopes pane in the Vivado debugger to select which module's wires are sh
 
 ## Demo
 
-Demo information TBD
+There is no demo for this lab.

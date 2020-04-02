@@ -200,7 +200,7 @@ module test_processor;
          end 
 
          // count consecutive stalls
-         if (test_stall !== 2'b000) begin
+         if (test_stall !== 3'b000) begin
             if (consecutive_stalls >= 5) begin
                if (errors <= `MAX_FAILURES_TO_PRINT) begin 
                   $display("Error at cycle %d: your pipeline has stalled for more than 5 cycles in a row, which should never happen. This might indicate your pipeline will be stuck stalling forever.", num_cycles);

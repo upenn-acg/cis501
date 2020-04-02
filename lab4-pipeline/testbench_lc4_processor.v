@@ -116,7 +116,10 @@ module test_processor;
                             );
    
    initial begin
+`ifdef GENERATE_VCD
+      $dumpfile(`VCD_FILE); 
       $dumpvars(0,test_processor);
+`endif
       
       // Initialize Inputs
       clk = 0;

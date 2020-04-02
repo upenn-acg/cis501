@@ -116,6 +116,8 @@ module test_processor;
                             );
    
    initial begin
+      $dumpvars(0,test_processor);
+      
       // Initialize Inputs
       clk = 0;
       rst = 1;

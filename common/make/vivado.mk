@@ -1,7 +1,3 @@
-ifndef XILINX_VIVADO
-$(error ERROR cannot find Vivado, run "source /home1/c/cis371/software/Vivado/2017.4/settings64.sh")
-endif
-
 # Check that given variables are set and all have non-empty values,
 # die with an error otherwise.
 #
@@ -50,6 +46,9 @@ help:
 
 # run synthesis to identify code errors/warnings
 synth: setup-files $(SYNTH_SOURCES)
+ifndef XILINX_VIVADO
+	$(error ERROR cannot find Vivado, run "source /home1/c/cis371/software/Vivado/2017.4/settings64.sh")
+endif
 	echo -n "synthesis" > .step
 	$(time) vivado -mode batch -source $(TCL_DIR)/build.tcl
 
@@ -59,10 +58,24 @@ test: $(SYNTH_SOURCES) $(TESTBENCH) .set_testcase.v
 else
 test: $(SYNTH_SOURCES) $(TESTBENCH)
 endif
+ifndef XILINX_VIVADO
+	$(error ERROR cannot find Vivado, run "source /home1/c/cis371/software/Vivado/2017.4/settings64.sh")
+endif
 	rm -rf xsim.dir/
 	echo -n verilog mylib $^ > .prj
 	xelab $(XELAB_FLAGS) --debug off --prj .prj --snapshot snapshot.sim --lib mylib mylib.$(TOP_TESTBENCH_MODULE)
 	xsim snapshot.sim --runall --stats -wdb sim.wdb
+
+# run tests with Icarus Verilog simulator
+ifdef NEEDS_TEST_CASE
+iv-test: $(SYNTH_SOURCES) $(TESTBENCH) .set_testcase.v
+else
+iv-test: $(SYNTH_SOURCES) $(TESTBENCH)
+endif
+	@which iverilog || (echo "ERROR: can't find iverilog executable" && exit 1)
+	iverilog -Wall -Iinclude -s $(TOP_TESTBENCH_MODULE) -DGENERATE_VCD=1 -o a.out $^
+	./a.out
+
 
 # investigate design via GUI debugger
 ifdef NEEDS_TEST_CASE
@@ -70,17 +83,26 @@ debug: setup-files .set_testcase.v
 else
 debug: setup-files
 endif
+ifndef XILINX_VIVADO
+	$(error ERROR cannot find Vivado, run "source /home1/c/cis371/software/Vivado/2017.4/settings64.sh")
+endif
 	rm -rf .debug-project
 #	echo -n " .set_testcase.v" >> .synthesis-source-files
 	vivado -mode batch -source $(TCL_DIR)/debug.tcl
 
 # run synthesis & implementation to generate a bitstream
 impl: setup-files $(IMPL_SOURCES)
+ifndef XILINX_VIVADO
+	$(error ERROR cannot find Vivado, run "source /home1/c/cis371/software/Vivado/2017.4/settings64.sh")
+endif
 	echo -n "implementation" > .step
 	$(time) vivado -mode batch -source $(TCL_DIR)/build.tcl
 
 # program the device with user-specified bitstream
 program:
+ifndef XILINX_VIVADO
+	$(error ERROR cannot find Vivado, run "source /home1/c/cis371/software/Vivado/2017.4/settings64.sh")
+endif
 	@echo -n "Specify .bit file to use to program FPGA, then press <ENTER> [leave blank for output/$(BITSTREAM_FILENAME)]: "
 	@read bitfile && if [ -z "$$bitfile" ]; then export BITSTREAM_FILE="output/$(BITSTREAM_FILENAME)" ; else export BITSTREAM_FILE=$$bitfile; fi && echo $$BITSTREAM_FILE && $(time) vivado -mode batch -notrace -source $(TCL_DIR)/program.tcl
 
@@ -117,6 +139,7 @@ else
 	echo \`define ORIG_INPUT_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).trace\" >> $@
 	echo \`define MEMORY_IMAGE_FILE \"$(THIS_MAKEFILE_PATH)test_data/$(TEST_CASE).hex\" >> $@
 	echo \`define TEST_CASE \"$(TEST_CASE)\" >> $@
+	echo \`define VCD_FILE \"$(TEST_CASE).vcd\" >> $@
 endif
 endif
 endif
@@ -127,6 +150,9 @@ pennsim:
 
 # make BOOT.BIN image for programming FPGA from an SD card
 boot: output/$(BITSTREAM_FILENAME) $(SDBOOT_DIR)/zynq_fsbl_0.elf
+ifndef XILINX_VIVADO
+	$(error ERROR cannot find Vivado, run "source /home1/c/cis371/software/Vivado/2017.4/settings64.sh")
+endif
 	echo "the_ROM_image:{[bootloader]"$(SDBOOT_DIR)/zynq_fsbl_0.elf > $(SDBOOT_BIF)
 	echo output/$(BITSTREAM_FILENAME)"}" >> $(SDBOOT_BIF)
 	bootgen -image $(SDBOOT_BIF) -arch zynq -o output/BOOT.BIN
@@ -137,6 +163,6 @@ clean:
 	rm -f .synthesis-source-files .simulation-source-files .implementation-source-files .ip-blocks .top-synth-module .top-impl-module .top-level-testbench .set_testcase.v .constraint-files .bitstream-filename .prj $(SDBOOT_BIF)
 	rm -rf xsim.dir/ .Xil/ xelab.pb 
 
-# clean, then remove output/ directory: use with caution!
+# clean, then remove output/ directory and all .vcd dumps: use with caution!
 extraclean: clean
-	rm -rf output/
+	rm -rf output/ *.vcd

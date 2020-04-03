@@ -132,9 +132,10 @@ module test_processor;
    assign cur_pc_plus1 = cur_pc + 16'd1;
 
    task assertEqual;
-      input wire[15:0] expected, actual;
-      input reg[159:0]  label; // HACK: max length of 20 chars
-      // uses "global" variables: num_cycles, errors and exit_at_first_failure
+      input [15:0] expected;
+      input [15:0] actual;
+      input [159:0]  label; // HACK: max length of 20 chars
+      // uses "global" variables: num_cycles, errors
       begin
          if (actual !== expected) begin
             $display("Error at cycle %d: %s should be %h (but was %h)",
@@ -145,6 +146,11 @@ module test_processor;
    endtask
    
    initial begin
+`ifdef GENERATE_VCD
+      $dumpfile(`VCD_FILE); 
+      $dumpvars(0,test_processor);
+`endif
+      
       // Initialize Inputs
       clk = 0;
       rst = 1;
@@ -246,10 +252,10 @@ module test_processor;
          tests = tests + 2;
          
          // stall
-         assertEqual(.expected(verify_stall_A), .actual(test_stall_A), .label("test_stall_A"));
+         assertEqual(verify_stall_A, test_stall_A, "test_stall_A");
          // if A stalls with load-to-use, check if B superscalar-stalls
          // else, check according to ctrace file
-         assertEqual(.expected((verify_stall_A === 2'b11) ? 2'b01 : verify_stall_B), .actual(test_stall_B), .label("test_stall_B"));
+         assertEqual(((verify_stall_A === 2'b11) ? 2'b01 : verify_stall_B), (test_stall_B), ("test_stall_B"));
 
          // count consecutive stalls
          if (test_stall_A !== 2'd0 && test_stall_B !== 2'd0) begin
@@ -269,7 +275,7 @@ module test_processor;
 
             tests = tests + 10;
 
-            assertEqual(.expected(verify_cur_pc_A), .actual(test_cur_pc_A), .label("test_cur_pc_A"));
+            assertEqual((verify_cur_pc_A), (test_cur_pc_A), ("test_cur_pc_A"));
             
             // insn
             if (verify_cur_insn_A !== test_cur_insn_A) begin
@@ -284,24 +290,24 @@ module test_processor;
                end
             end
 
-            assertEqual(.expected(verify_regfile_we_A), .actual(test_regfile_we_A), .label("test_regfile_we_A"));
+            assertEqual((verify_regfile_we_A), (test_regfile_we_A), ("test_regfile_we_A"));
 
             if (verify_regfile_we_A) begin
-               assertEqual(.expected(verify_regfile_wsel_A), .actual(test_regfile_wsel_A), .label("test_regfile_wsel_A"));
-               assertEqual(.expected(verify_regfile_data_A), .actual(test_regfile_data_A), .label("test_regfile_data_A"));
+               assertEqual((verify_regfile_wsel_A), (test_regfile_wsel_A), ("test_regfile_wsel_A"));
+               assertEqual((verify_regfile_data_A), (test_regfile_data_A), ("test_regfile_data_A"));
             end
 
-            assertEqual(.expected(verify_nzp_we_A), .actual(test_nzp_we_A), .label("test_nzp_we_A"));
+            assertEqual((verify_nzp_we_A), (test_nzp_we_A), ("test_nzp_we_A"));
 
             if (verify_nzp_we_A) begin
-               assertEqual(.expected(verify_nzp_new_bits_A), .actual(test_nzp_new_bits_A), .label("test_nzp_new_bits_A"));
+               assertEqual((verify_nzp_new_bits_A), (test_nzp_new_bits_A), ("test_nzp_new_bits_A"));
             end
 
-            assertEqual(.expected(verify_dmem_we_A), .actual(test_dmem_we_A), .label("test_dmem_we_A"));
+            assertEqual((verify_dmem_we_A), (test_dmem_we_A), ("test_dmem_we_A"));
 
-            assertEqual(.expected(verify_dmem_addr_A), .actual(test_dmem_addr_A), .label("test_dmem_addr_A"));
+            assertEqual((verify_dmem_addr_A), (test_dmem_addr_A), ("test_dmem_addr_A"));
 
-            assertEqual(.expected(verify_dmem_data_A), .actual(test_dmem_data_A), .label("test_dmem_data_A"));
+            assertEqual((verify_dmem_data_A), (test_dmem_data_A), ("test_dmem_data_A"));
 
          end // non-stall cycle, A pipe
 
@@ -309,7 +315,7 @@ module test_processor;
 
             tests = tests + 10;
 
-            assertEqual(.expected(verify_cur_pc_B), .actual(test_cur_pc_B), .label("test_cur_pc_B"));
+            assertEqual((verify_cur_pc_B), (test_cur_pc_B), ("test_cur_pc_B"));
             
             // insn
             if (verify_cur_insn_B !== test_cur_insn_B) begin
@@ -324,24 +330,24 @@ module test_processor;
                end
             end
 
-            assertEqual(.expected(verify_regfile_we_B), .actual(test_regfile_we_B), .label("test_regfile_we_B"));
+            assertEqual((verify_regfile_we_B), (test_regfile_we_B), ("test_regfile_we_B"));
 
             if (verify_regfile_we_B) begin
-               assertEqual(.expected(verify_regfile_wsel_B), .actual(test_regfile_wsel_B), .label("test_regfile_wsel_B"));
-               assertEqual(.expected(verify_regfile_data_B), .actual(test_regfile_data_B), .label("test_regfile_data_B"));
+               assertEqual((verify_regfile_wsel_B), (test_regfile_wsel_B), ("test_regfile_wsel_B"));
+               assertEqual((verify_regfile_data_B), (test_regfile_data_B), ("test_regfile_data_B"));
             end
 
-            assertEqual(.expected(verify_nzp_we_B), .actual(test_nzp_we_B), .label("test_nzp_we_B"));
+            assertEqual((verify_nzp_we_B), (test_nzp_we_B), ("test_nzp_we_B"));
 
             if (verify_nzp_we_B) begin
-               assertEqual(.expected(verify_nzp_new_bits_B), .actual(test_nzp_new_bits_B), .label("test_nzp_new_bits_B"));
+               assertEqual((verify_nzp_new_bits_B), (test_nzp_new_bits_B), ("test_nzp_new_bits_B"));
             end
 
-            assertEqual(.expected(verify_dmem_we_B), .actual(test_dmem_we_B), .label("test_dmem_we_B"));
+            assertEqual((verify_dmem_we_B), (test_dmem_we_B), ("test_dmem_we_B"));
 
-            assertEqual(.expected(verify_dmem_addr_B), .actual(test_dmem_addr_B), .label("test_dmem_addr_B"));
+            assertEqual((verify_dmem_addr_B), (test_dmem_addr_B), ("test_dmem_addr_B"));
 
-            assertEqual(.expected(verify_dmem_data_B), .actual(test_dmem_data_B), .label("test_dmem_data_B"));
+            assertEqual((verify_dmem_data_B), (test_dmem_data_B), ("test_dmem_data_B"));
 
          end // non-stall cycle, B pipe
 

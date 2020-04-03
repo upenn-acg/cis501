@@ -59,7 +59,7 @@ You can then open a `.vcd` file in GTKWave to view the signals in your design th
 
 ### Generating .vcd file on biglab, running GTKWave locally
 
-An alternative workflow is to install only GTKWave on your local computer, and use Vivado (on biglab) to generate the `.vcd` files that GTKWave can visualize for you. To do this, you need to make a small edit to your lab's `testbench_lc4_processor.v` file, adding this code at the top:
+An alternative workflow is to install only GTKWave on your local computer (see instructions from [the GTKWave website](http://gtkwave.sourceforge.net)), and use Vivado (on biglab) to generate the `.vcd` files that GTKWave can visualize for you. To do this, you need to make a small edit to your lab's `testbench_lc4_processor.v` file, adding this code at the top:
 ```
 `define GENERATE_VCD 1
 ```

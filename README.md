@@ -2,11 +2,13 @@ This is the repository for the labs in [CIS 501: Computer Architecture](http://c
 
 # Running the testbench on your local machine
 
-It is possible to run the various test cases on your local machine using an alternative Verilog simulator called [Icarus Verilog](http://iverilog.icarus.com) or `iverilog`. `iverilog` can generate a trace of your design in a `.vcd` file that you can then view in another program called [GTKWave](http://gtkwave.sourceforge.net), which is equivalent to the Vivado debugger. By running on your _local_ machine, you get potentially faster performance and avoid lag and connectivity issues to the biglab machines. 
+It is possible to run the various test cases on your local machine using an alternative Verilog simulator called [Icarus Verilog](http://iverilog.icarus.com) or `iverilog`. `iverilog` can generate a trace of your design in a `.vcd` file that you can then view in another program called [GTKWave](http://gtkwave.sourceforge.net), which is equivalent to the Vivado debugger. By running on your _local_ machine, you get potentially faster performance and avoid lag and connectivity issues to the biglab machines.
 
-There are errors and warnings from `make synth` or `make impl` that **will only be shown by Vivado**. Moreover, **the autograder will continue to run the Vivado tools on biglab**. So there are still reasons to run things on biglab occasionally. But the bulk of your debugging can likely be done without biglab.
+Some caveats:
 
-It is also possible to install the Vivado compiler locally on a Linux or Windows machine. However it is quite heavyweight, requiring about ~30GB of hard drive space. `iverilog` and `gtkwave` combined, however, take about 10MB (admittedly, excluding other packages they depend on).
+* There are errors and warnings from `make synth` or `make impl` that **will only be shown by Vivado**. Moreover, **the autograder will continue to run the Vivado tools on biglab**. So there are still reasons to run things on biglab occasionally. 
+* Icarus Verilog sometimes stumbles on Verilog code that Vivado is perfectly happy with. So you may need to make small edits to your code to satisfy Icarus. Please post on piazza with problems/workarounds you discover to help others navigate this process.
+* It is also possible to install the Vivado compiler locally on a Linux or Windows machine. However it is quite heavyweight, requiring about ~30GB of hard drive space, and the scripts we have for Vivado can only be run on Linux. In contrast, `iverilog` and `gtkwave` combined take about 90MB.
 
 ### Linux
 
@@ -18,7 +20,7 @@ cd path-to-your-501-git-repo/whichever-lab-you're-working-on
 TEST_CASE=test_alu make iv-test
 ```
 
-You can then launch `gtkwave`, and open the `test_alu.vcd` file with `File`=>`New Window`.
+You can then run `gtkwave test_alu.vcd &` to launch the debugger with the execution of `test_alu`.
 
 ### Mac OSX
 
@@ -31,29 +33,33 @@ cd path-to-your-501-git-repo/whichever-lab-you're-working-on
 TEST_CASE=test_alu make iv-test
 ```
 
-You can then launch `gtkwave`, and open the `test_alu.vcd` file with `File`=>`New Window`.
+You can then launch `gtkwave`, and open the `test_alu.vcd` file with `File`=>`New Window`. On Joe's Mac, he can't launch `gtkwave` from the Terminal for some reason but can do so via Spotlight or by navigating to the `/Applications` folder.
 
-### Windows 10
+### Windows
 
-You should be able to install Icarus Verilog using the Windows Subsystem for Linux (WSL). See [the instructions from Microsoft](https://docs.microsoft.com/en-us/windows/wsl/install-win10) for installing WSL. Supposing you choose a version of Ubuntu, you should then be able to run, from inside your Ubuntu installation:
+Install the Windows version of Icarus Verilog from [here](http://bleyer.org/icarus/). Use the `iverilog-v11-20190809-x64_setup` version in particular. During installation, there are two important steps:
 
+1) Choose the **Full installation** option, which installs GTKWave and other code that `iverilog` needs.
+![icarus-full-installation](https://raw.githubusercontent.com/upenn-acg/cis501/icarus/images/icarus-full-installation.png)
+
+2) Have your `PATH` updated to include the `iverilog.exe` and `gtkwave.exe` executables.
+![icarus-path](https://raw.githubusercontent.com/upenn-acg/cis501/icarus/images/icarus-path.png)
+
+Then, you can open up the Windows command prompt or PowerShell (we recommend the latter) and run:
 ```
-sudo apt-get install iverilog
+cd path-to-your-501-git-repo\whichever-lab-you're-working-on
+iv-test.cmd test_alu
 ```
+This runs the `test_alu` test case and produces a file `test_alu.vcd`. You can substitute other test cases as well. 
 
-We recommend then installing `gtkwave` in Windows (not in WSL), since it is a GUI app and getting Linux GUI apps running in WSL requires some extra steps. You can find `gtkwave` installers for Windows at [the GTKWave website](http://gtkwave.sourceforge.net).
-
-Back in Ubuntu, you can then run:
-```
-cd path-to-your-501-git-repo/whichever-lab-you're-working-on
-TEST_CASE=test_alu make iv-test
-```
-This produces a file `test_alu.vcd` that you can transfer to Windows, and open with GTKWave there.
+You can then open a `.vcd` file in GTKWave to view the signals in your design throughout the entire execution. To launch GTKWave, in our test installation nothing was added to the Start Menu, so there are two options:
+* navigate to the Icarus Verilog installation directory that you chose (`C:\iverilog` by default) and then to `gtkwave\bin\gtkwave.exe`. You can open a new `.vcd` file via `File => Open New Window` or `File => Open New Tab`.
+* in PowerShell, run `Start-Process -NoNewWindow gtkwave.exe test_alu.vcd`. Just running `gtkwave.exe` runs it in the foreground which blocks the PowerShell session.
 
 
 ### Generating .vcd file on biglab, running GTKWave locally
 
-An alternative workflow is to install only GTKWave on your local computer, and use Vivado (on biglab) to generate the `.vcd` files that GTKWave can visualize for you. To do this, you need to make a small edit to your lab's `testbench_lc4_processor.v` file, adding this code at the top:
+An alternative workflow is to install only GTKWave on your local computer (see instructions from [the GTKWave website](http://gtkwave.sourceforge.net)), and use Vivado (on biglab) to generate the `.vcd` files that GTKWave can visualize for you. To do this, you need to make a small edit to your lab's `testbench_lc4_processor.v` file, adding this code at the top:
 ```
 `define GENERATE_VCD 1
 ```

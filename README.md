@@ -39,7 +39,7 @@ You can then launch `gtkwave`, and open the `test_alu.vcd` file with `File`=>`Ne
 
 Install the Windows version of Icarus Verilog from [here](http://bleyer.org/icarus/). Use the `iverilog-v11-20190809-x64_setup` version in particular. During installation, there are two important steps:
 
-1) Choose the **Full installation** option, which bundles GTKWave and other code that `iverilog` needs.
+1) Choose the **Full installation** option, which installs GTKWave and other code that `iverilog` needs.
 
 
 2) Have your `PATH` updated to include the `iverilog.exe` and `gtkwave.exe` executables.

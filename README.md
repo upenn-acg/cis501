@@ -40,10 +40,10 @@ You can then launch `gtkwave`, and open the `test_alu.vcd` file with `File`=>`Ne
 Install the Windows version of Icarus Verilog from [here](http://bleyer.org/icarus/). Use the `iverilog-v11-20190809-x64_setup` version in particular. During installation, there are two important steps:
 
 1) Choose the **Full installation** option, which installs GTKWave and other code that `iverilog` needs.
-![icarus-full-installation](https://raw.githubusercontent.com/upenn-acg/cis501/icarus/images/icarus-full-installation.png)
+![icarus-full-installation](https://github.com/upenn-acg/cis501/raw/master/images/icarus-full-installation.png)
 
 2) Have your `PATH` updated to include the `iverilog.exe` and `gtkwave.exe` executables.
-![icarus-path](https://raw.githubusercontent.com/upenn-acg/cis501/icarus/images/icarus-path.png)
+![icarus-path](https://github.com/upenn-acg/cis501/raw/master/images/icarus-path.png)
 
 Then, you can open up the Windows command prompt or PowerShell (we recommend the latter) and run:
 ```
